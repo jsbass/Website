@@ -1,0 +1,388 @@
+@charset "utf-8";
+/* CSS Document */
+
+.orbit {
+	border-width:1px;
+	border-style:dashed;
+	border-color:white;
+	border-radius:50%;
+}
+
+.orbit:hover {
+	border:1px dashed green !important;
+}
+
+#sun {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -51px;
+	margin-left: -51px;
+	
+	width: 100px;
+	height: 100px;
+	background-color:yellow;
+	border: 1px solid orange;
+	border-radius: 50%;
+	box-shadow: 0 0 128px yellow;
+}
+
+#mercury-orbit {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -75px;
+	margin-left: -75px;
+	
+	width:150px;
+	height:150px;
+}
+
+#mercury {
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top: -3px;
+	margin-left: -3px;
+	
+	width: 6px;
+	height: 6px;
+	background-color:#CCCCCC;
+	border-radius: 50%
+}
+
+#venus-orbit {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -100px;
+	margin-left: -100px;
+	
+	width: 200px;
+	height: 200px;
+}
+
+#venus{
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top: -5px;
+	margin-left: -5px;
+	
+	width: 10px;
+	height: 10px;
+	background-color:#999900;
+	border-radius:50%;
+}
+
+#earth-orbit {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -125px;
+	margin-left: -125px;
+	
+	width: 250px;
+	height: 250px;
+}
+
+#earth {
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top: -5px;
+	margin-left: -5px;
+	
+	width: 10px;
+	height: 10px;
+	background-color:blue;
+	border-radius: 50%;	
+}
+
+#moon-orbit {
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top: -7px;
+	margin-left: -7px;
+	
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+}
+
+#moon {
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top: -1px;
+	margin-left: -1px;
+	
+	width: 2px;
+	height: 2px;
+	background-color:white;
+	border-radius: 50%;
+}
+
+#mars-orbit {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -150px;
+	margin-left: -150px;
+	
+	width: 300px;
+	height: 300px;
+}
+
+#mars {
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top: -4px;
+	margin-left: -4px;
+	
+	width: 8px;
+	height: 8px;
+	background-color:red;
+	border-radius:50%;
+}
+
+#asteroid-belt {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top:-183px;
+	margin-left:-183px;
+	width: 350px;
+	height: 350px;
+	border: 8px dotted brown;
+	border-radius: 50%;
+}
+
+#jupiter-orbit {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top:-225px;
+	margin-left:-225px;
+	
+	width: 450px;
+	height: 450px;
+}
+
+#jupiter {
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top:-15px;
+	margin-left:-15px;
+	
+	width: 30px;
+	height:30px;
+	background-color:maroon;
+	border-radius:50%;
+}
+
+#saturn-orbit {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top:-275px;
+	margin-left:-275px;
+	
+	width: 550px;
+	height: 550px;
+}
+
+#saturn {
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top:-12px;
+	margin-left:-12px;
+	
+	width:24px;
+	height:24px;
+	background-color:darkseagreen;
+	border-radius:50%;
+}
+
+#saturn-rings{
+	position:absolute;
+	top:100%;
+	left:50%;
+	margin-top:-16px;
+	margin-left:-16px;
+	
+	width:28px;
+	height:28px;
+	border: 2px solid grey;
+	border-radius:50%;
+}
+
+#uranus-orbit {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top:-325px;
+	margin-left:-325px;
+	
+	width: 650px;
+	height: 650px;
+}
+
+#uranus {
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top:-10px;
+	margin-left:-10px;
+	
+	width:20px;
+	height:20px;
+	background-color:cornflowerblue;
+	border-radius:50%;
+}
+
+#neptune-orbit {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -375px;
+	margin-left: -375px;
+	
+	width:750px;
+	height:750px;
+}
+
+#neptune {
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top:-10px;
+	margin-left:-10px;
+	
+	width:20px;
+	height:20px;
+	background-color:blue;
+	border-radius:50%;
+}
+
+#pluto-orbit {
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -425px;
+	margin-left: -425px;
+	
+	width: 850px;
+	height: 850px;
+}
+
+#pluto {
+	position:absolute;
+	top: 100%;
+	left: 50%;
+	margin-top:-2px;
+	margin-left:-2px;
+	
+	width:4px;
+	height:4px;
+	background-color:grey;
+	border-radius:50%;
+}
+
+#info{
+	position:absolute;
+	top:0px;
+	left:0px;
+	padding:10px;
+}
+
+#info h1{
+	position:static;
+	width:inherit;
+	text-align:inherit;
+	top: inherit;
+    
+    color:white;
+	font-family:"Courier New", Courier, monospace;
+	text-decoration:none;
+	font-size:18px;
+}
+
+#info p{
+	position:static;
+	margin:auto;
+	color:white;
+    
+	color:white;
+	font-family:"Courier New", Courier, monospace;
+	font-size:14px;
+}
+
+#visForm {
+    position:absolute;
+    left:0;
+    top:200px;
+    padding: 10px;
+    
+    color:white;
+    border: 1px dashed white;
+}
+
+#ctrlForm {
+    position:absolute;
+    right:0;
+    top:0;
+    
+    color:white;
+}
+
+#timeDilation {
+    color:white;
+}
+
+* h1 {
+	position:absolute;
+	width:100%;
+	text-align:center;
+	top: -35px;
+	
+	text-decoration:underline;
+	color:white;
+	font-family:"Courier New", Courier, monospace;
+	font-size:14px;
+}
+
+* p{
+	position:absolute;
+	margin:0 0 -.5em -.3em;
+	
+	font-family:"Courier New", Courier, monospace;
+	font-size:1em;
+	color:white;
+}
+
+.handWrapper {
+	position:absolute;
+	top:0;
+	left:0;
+	margin:0;
+	padding:0;
+	
+	height:100%;
+	width:100%;
+}
+
+.counterHand {
+	position:absolute;
+	top:0%;
+	right:50%;
+	margin-left:-1px;
+	
+	height:50%;
+	width:2px;
+	background-color:red;
+}

@@ -1,0 +1,10 @@
+.createDialog {
+	position:absolute;
+	min-width:100px;
+	
+	border: 1px dashed blue;
+}
+
+.optionsList{
+	
+}

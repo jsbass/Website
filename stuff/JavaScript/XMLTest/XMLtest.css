@@ -1,0 +1,44 @@
+#incident {
+	position: absolute;
+	left: 0%;
+	top: 0%;
+}
+
+#urgent {
+	position: absolute;
+	left: 50%;
+	margin-left: -50%;
+	top: 0%;
+}
+
+#faculty_assist {
+	position: absolute;
+	right: 100%;
+	top:0%;
+}
+
+#footer {
+	position: absolute;
+	width: 100%;
+	height: 10%;
+	bottom: 100%;
+	background-color: #6666FF;
+	color: #FFFFFF;
+	border-radius: 10px;
+}
+
+body,html {
+	width: 100%;
+    height: 100%;
+	margin:0;
+	padding:0;
+	
+	background-color:#85B9AA;
+  }
+
+#content {
+	position: absolute;
+	width: 100%;
+
+	color: #FFFFFF;
+}

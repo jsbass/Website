@@ -1,0 +1,329 @@
+/* 
+******************************************************************************
+*** Project #5:  Sports Scores                                             ***
+*** Author:      Jacob Bass (bass@ou.edu                                   ***
+*** Class:       CS 1313 010 Computer Programming, Fall 2013               ***
+*** Lab:         Sec 015 Fridays 3:30pm                                    ***
+*** Description: Converts a file input two lists of numbers of defined     ***
+***              and fuel burn rate to metric units                        ***
+******************************************************************************
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main()
+{ /*main*/
+
+    /*
+     ***************************
+     *** Declaration Section ***
+     ***************************
+     *
+     *****************************
+     * Named Constant Subsection *
+     *****************************
+     *
+     * program_success_code:  number signified the programs successful
+     *                        completion by returning it to the operating
+     *                        system upon exit
+     * program_failure_code:  number signified the programs unsuccessful
+     *                        completion by returning it to the operating
+     *                        system upon exit
+     * reciprical_numerator:  Since we can't use number literals in he 
+     *                        calculations section this is a variable 
+     *                        representative of the number one
+     * count_start_value:     the starting value for the for loops' counter
+     * minimum_array_length:  the minimum size an array can be
+     *
+     */
+
+    const int program_success_code = 0, program_failure_code = -1;
+    const int reciprical_numerator = 1;
+    const int count_start_value = 0;
+    const int minimum_array_length = 1;
+
+    /*
+     *****************************
+     * Local Variable Subsection *
+     *****************************
+     *
+     * array_1:               The array that stores the values for the first
+     *                        list
+     * array_2:               The array that stores the values for the second
+     *                        list
+     * arithmetic_mean:       the arithmetic mean of the input values
+     * root_mean_square:      the root mean square of the input values
+     * harmonic_mean:         the harmonic mean of the input values
+     * value1:                User input fist value in the set of data
+     * value2:                User input second value in the set of data
+     * value3:                User input third value in the set of data
+     * value4:                User inpur fourth value in the set of data
+     * count:                 the counter variable for the for loops
+     * array_length:          the size of the arrays
+     *
+     */
+
+    float* array_1 = (float*)NULL;
+    float* array_2 = (float*)NULL;
+    float sum_1 = 0, sum_2 = 0, sum_total = 0;
+    float squared_sum_1 = 0, squared_sum_2 = 0, squared_sum_total = 0;
+    float reciprical_sum_1 = 0, reciprical_sum_2 = 0, reciprical_sum_total = 0;
+    float arithmetic_mean_1, arithmetic_mean_2, arithmetic_mean_total;
+    float RMS_1, RMS_2, RMS_total;
+    float harmonic_mean_1, harmonic_mean_2, harmonic_mean_total;
+    int count;
+    int array_length;
+
+    /*
+     *************************
+     *** Execution Section ***
+     *************************
+     *
+     ***********************
+     * Greeting Subsection *
+     ***********************
+     *
+     * Describe what the program does and how to use it
+     */
+
+    printf("\n");
+    printf("Given two file input lists of equal length, this program");
+    printf("will calculate for each:\n");
+    printf("    Arithmetic Mean\n");
+    printf("    Root Mean Square\n");
+    printf("    Harmonic Mean\n");
+    printf("\n");
+    printf("As well as calculating the repective statistics for each result\n");
+    printf("   ( ie. the harmonic mean of the two resultant harmonic means)\n");
+
+    /*
+     ********************
+     * Input Subsection *
+     ********************
+     *
+     * Input the array lengths from the file
+     */
+
+    scanf("%d", &array_length);
+
+    /*
+     * Idiotproofing: Make sure the array_length is large enough
+     */
+
+    if (array_length < minimum_array_length) {
+        /*
+         * The array is too small
+         */
+
+        printf("ERROR: %d is not valid list length (must be greater than %d)\n",
+            array_length, minimum_array_length);
+        exit(program_failure_code);
+
+    } /* if (array_length < minimum_array_length) */
+
+    /*
+     * Allocate memory for the two arrays
+     */
+
+    array_1 = (float*)malloc(sizeof(float) * array_length);
+    array_2 = (float*)malloc(sizeof(float) * array_length);
+
+    /*
+     * Make sure the memory allocation was successful
+     */
+
+    if ((array_1 == NULL) || (array_2 == NULL)) {
+        /*
+         * One of the memory allocations failed
+         */
+ 
+        printf("ERROR: Memory allocation failed\n");
+        exit(program_failure_code);
+
+    } /* if ((array_1 == NULL) || (array_2 == NULL)) */
+
+    /*
+     * Input the values for the arrays from the input file
+     */
+
+    for (count = count_start_value; count < array_length; count++) {
+       /*
+        * inputs the values from the line number count + 1
+        */
+
+        scanf("%f %f", &array_1[count], &array_2[count]);
+
+    } /* for count */
+
+    /*
+     **************************
+     * Calculation Subsection *
+     **************************
+     *
+     * Start calculating the arithmetic mean for each array
+     */
+
+    /*
+     * Finds the sum of each value for each array
+     */
+
+    for (count = count_start_value; count < array_length; count++) {
+       /*
+        * takes the current sum values and adds to it the values stored 
+        * in the respective arrays at [count]
+        */
+
+        sum_1 += array_1[count];
+        sum_2 += array_2[count];
+
+    } /* for count */
+
+    /*
+     * Calculate the arithmetic mean for each array
+     */
+
+    arithmetic_mean_1 = sum_1 / array_length;
+    arithmetic_mean_2 = sum_2 / array_length;
+
+    /*
+     * Start calculating the root mean square for each array
+     */
+
+    /*
+     * Finds the sum of the squares of each value for each array
+     */
+
+    for (count = count_start_value; count < array_length; count++) {
+       /*
+        * takes the current squared sum and add to it the square of the 
+        * value stored in each respective array at [count]
+        */
+
+        squared_sum_1 += array_1[count] * array_1[count]; 
+        squared_sum_2 += array_2[count] * array_2[count];
+
+    } /* for count */
+
+    /*
+     * Calculate the root mean square for each array
+     */
+
+    RMS_1 = sqrt(squared_sum_1 / array_length);
+    RMS_2 = sqrt(squared_sum_2 / array_length);
+
+    /*
+     * Start calculating the harmonic mean for each array
+     */
+
+    /*
+     * Finds the sum of the recipricals of each value for each array
+     */
+
+    for (count = count_start_value; count < array_length; count++) {
+
+       /*
+        * takes the current reciprical sum and adds to it the reciprical 
+        * of the values stored in each respective array at [count]
+        */
+
+        reciprical_sum_1 += reciprical_numerator / array_1[count];
+        reciprical_sum_2 += reciprical_numerator / array_2[count];
+
+    } /* for count */
+
+    /*
+     * Calculate the harmonic mean for each array
+     */
+
+    harmonic_mean_1 = array_length / reciprical_sum_1;
+    harmonic_mean_2 = array_length / reciprical_sum_2;
+
+
+    /*
+     * Calculate the arithmetic mean of the arithmetic means
+     */
+
+    arithmetic_mean_total = (arithmetic_mean_1 + arithmetic_mean_2)
+        / array_length;
+
+    /*
+     * Calculate the root mean square of the root mean squares
+     */
+
+    RMS_total = sqrt(((RMS_1*RMS_1) + (RMS_2*RMS_2))/array_length);
+
+    /*
+     * Calculate the harmonic mean of the harmonic means
+     */
+
+    harmonic_mean_total = array_length /
+        ((reciprical_numerator / harmonic_mean_1) +
+        (reciprical_numerator / harmonic_mean_2));
+
+    /*
+     *********************
+     * Output Subsection *
+     *********************
+     *
+     * Output all of the calculated statistics
+     */
+
+    /*
+     * Output the length of the two lists
+     */
+
+    printf("\n");
+    printf("The lists were %d items long\n", array_length);
+    printf("\n");
+
+    /*
+     * Ouput the arithmetic mean, root mean square and, harmonic mean for the
+     * first list
+     */
+
+    printf("For the first list:\n");
+    printf("       Arithmetic Mean      :    %7.3f\n", arithmetic_mean_1);
+    printf("       Root Mean Square     :    %7.3f\n", RMS_1);
+    printf("       Harmonic Mean        :    %7.3f\n", harmonic_mean_1);
+    printf("\n");
+
+    /*
+     * Ouput the arithmetic mean, root mean square and, harmonic mean for the
+     * second list
+     */
+
+    printf("For the second list:\n");
+    printf("       Arithmetic Mean      :    %7.3f\n", arithmetic_mean_2);
+    printf("       Root Mean Square     :    %7.3f\n", RMS_2);
+    printf("       Harmonic Mean        :    %7.3f\n", harmonic_mean_2);
+    printf("\n");
+
+    /*
+     * Ouput the arithmetic mean, root mean square and, harmonic mean for the
+     * respective statistics
+     */
+
+    printf("For the repective statistics:\n");
+    printf("       Arithmetic Mean      :    %7.3f\n", arithmetic_mean_total);
+    printf("       Root Mean Square     :    %7.3f\n", RMS_total);
+    printf("       Harmonic Mean        :    %7.3f\n", harmonic_mean_total);
+    printf("\n");
+
+    /*
+     * Free the dynamically allocated memory
+     */
+
+    free(array_2);
+    array_2 = (float*)NULL;
+    free(array_1);
+    array_1 = (float*)NULL;
+
+    /*
+     * Exit and send the program success code to the OS
+     */
+
+    exit(program_success_code);
+
+} /*main*/

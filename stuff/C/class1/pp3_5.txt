@@ -1,0 +1,337 @@
+Script started on Fri 25 Oct 2013 04:23:53 PM CDT
+polk.itsc.ou.edu:bass8424 % pwd
+/oushomes/FacStaff/bass8424/CS1313
+polk.itsc.ou.edu:bass8424 % ls -l
+total 292
+drwx------ 2 bass8424 staff  4096 Oct 25 16:23 .
+drwx-----x 5 bass8424 staff  4096 Sep 27 21:18 ..
+-rw-r--r-- 1 bass8424 staff     0 Sep 20 20:44 a.out
+-rwxr-xr-x 1 bass8424 staff  5986 Sep  9 22:34 census2
+-rw-r--r-- 1 bass8424 staff  3480 Sep  9 22:33 census2.c
+-rw-r--r-- 1 bass8424 staff  3529 Sep 18 00:38 census.c
+-rw-r--r-- 1 bass8424 staff  3477 Sep  9 22:37 census.c~
+-rwxr-xr-x 1 bass8424 staff  6233 Oct 25 16:14 choose
+-rw-r--r-- 1 bass8424 staff  6160 Oct 25 16:23 choose.c
+-rw-r--r-- 1 bass8424 staff  5573 Oct 25 16:12 choose.c~
+-rw-r--r-- 1 bass8424 staff  4199 Sep 20 21:57 conversions.c
+-rw-r--r-- 1 bass8424 staff  4200 Sep 20 21:56 conversions.c~
+-rw-r--r-- 1 bass8424 staff   456 Oct 24 15:32 makefile
+-rw-r--r-- 1 bass8424 staff   455 Oct 24 15:31 makefile~
+-rw-r--r-- 1 bass8424 staff  3947 Aug 30 15:47 my_number.c
+-rw-r--r-- 1 bass8424 staff  3947 Aug 30 15:47 my_number.c~
+-rwxr--r-- 1 bass8424 staff  5950 Aug 30 15:43 pp1.txt
+-rw-r--r-- 1 bass8424 staff  7095 Sep 18 00:45 pp2.txt
+-rw-r--r-- 1 bass8424 staff     0 Oct 25 16:23 pp3_5.txt
+-rw-r--r-- 1 bass8424 staff 37801 Oct 23 08:57 pp4.txt
+-rw-r--r-- 1 bass8424 staff 22165 Oct 23 08:51 restaurant.c
+-rw-r--r-- 1 bass8424 staff 22167 Oct 23 08:43 restaurant.c~
+-rw-r--r-- 1 bass8424 staff  3860 Sep 27 16:18 statistics.c
+-rw-r--r-- 1 bass8424 staff  3859 Sep 27 16:14 statistics.c~
+polk.itsc.ou.edu:bass8424 % ls -l[29Gpwd[Kchoose[29G[5@make [40G[29G[5P[35G[29Gpwd[Kls -l[K[K[K[Kcat makefile
+choose:		choose.c
+		gcc -o choose choose.c -lm
+
+restaurant:	restaurant.c
+		gcc -o restaurant restaurant.c -lm
+
+conversions: 	conversions.c
+		gcc -o conversions conversions.c -lm
+
+statistics: 	statistics.c
+		gcc -o statistics statistics.c -lm
+
+census:		census.c
+		gcc -o census census.c
+
+my_number:	my_number.c
+		gcc -o my_number my_number.c
+
+clean:	
+		rm -f my_number
+		rm -f census
+		rm -f statistics
+		rm -f conversions
+		rm -f restaurant
+		rm -f choose
+polk.itsc.ou.edu:bass8424 % cat choose.c
+/*
+ ******************************************************************************
+ *** Project 3.5: Combinations                                              ***
+ *** Program: choose                                                        ***
+ *** Author: Jacob Bass (bass@ou.edu                                        ***
+ *** Class: CS 1313 010 Computer Programming, Fall 2013                     ***
+ *** Lab: Sec 015 Fridays 3:30pm                                            ***
+ *** Description: Takes the user input, total number of items available and ***
+ ***              the size of the subgroup to be created and determines the ***
+ ***              total number of subgroups that can be created from the    ***
+ ***              total number of items                                     ***
+ ******************************************************************************
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{ /* main*/
+    /*
+     ***************************
+     *** Declaration Section ***
+     ***************************
+     *
+     *****************************
+     * Named Constant Subsection *
+     *****************************
+     *
+     * program_success_code: boolean value for whether the program 
+     *                       executed successfully
+     * program_failure_code: boolean value for whether the program
+     *                       executed successfully
+     * count_start_value:    The value for the start of both the numerator
+     *                       and denominator loops
+     *
+     */
+
+    const int program_success_code = 1;
+    const int program_failure_code = 0;
+    const int count_start_value = 1;
+
+    /*
+     * Local Variable Subsection *
+     *****************************
+     *
+     * number_of_items:           the total number of items
+     * subgroup_size:             the size of the subgroups
+     * number_of_combos:          the number of possible combinations
+     * num_of_combos_numerator:   the numerator of the number of combinations
+     * num_of_combos_denominator: the denonminator of the number of combinations
+     * numerator_counter:         the counter used for the numerator loop
+     * denominator_counter:       the counter used for the denominator loop
+     *
+     */
+
+    int number_of_items = 0, subgroup_size = 0;
+    int number_of_combos = 0;
+    int num_of_combos_numerator = 0, num_of_combos_denominator = 1;
+    int numerator_counter, denominator_counter;
+
+    /*
+     *************************
+     *** Execution Section ***
+     *************************
+     *
+     ***********************
+     * Greeting Subsection *
+     ***********************
+     *
+     * Greets the user and tells them the program's function
+     *
+     */
+
+    printf("I will tell you the number of combinations available given:\n");
+    printf("    Total number of items \n");
+    printf("    Size of the subgroups \n");
+
+    /*
+     ********************
+     * Input Subsection *
+     ********************
+     *
+     * Prompt the user to input the number of items (Larger than 0)
+     *
+     */
+
+    printf("Please enter the total number of items (must be larger than 0):\n");
+
+    /*
+     * Input the user's total number of items
+     */
+
+    scanf("%d", &number_of_items);
+
+    /*
+     * Idiotproofing: make sure the user input a value greater than zero
+     */
+
+    if (number_of_items <= 0) {
+
+        /*
+         * number_of_items wasn't greater than zero
+         * Print Error Message and exit program with failure code
+         */
+
+        printf("ERROR: The total number of items needs to be greater than 0\n");
+        exit(program_failure_code);
+
+    } /* if (numner_of_items <= 0) */
+
+    /*
+     * Prompt user for the size of the subgroups
+     */
+
+    printf("Please input the size of the subgroups (Must be between 0 and"); 
+    printf(" the total size)\n");
+
+    /*
+     * Input the user's size of the subgroups
+     */
+
+    scanf("%d", &subgroup_size);
+
+    /*
+     * Idiotproofing: Make the user input a subgroup_size that was 
+     * larger than zero and less than the total number of items
+     */
+
+    if (subgroup_size <= 0) {
+
+        /*
+         * subgroup_size wasn't greater than zero
+         */
+
+        printf("ERROR: the subgroup size needs to be greater than 0\n");
+        exit(program_failure_code);
+
+    } /* if (subgroup_size <= 0) */
+
+    if (subgroup_size > number_of_items) {
+
+         /*
+          * subgrou_size was greater than the total number of items
+          */
+
+         printf("ERROR: the subgroup size needs to be less than the total");
+         printf(" number of items\n");
+         exit(program_failure_code);
+
+    } /* if (subgroup_size > number_of_items) */
+
+    /*
+     ***************************
+     * Calculations Subsection *
+     ***************************
+     *
+     * Calculate the numerator of the number of combinations
+     *
+     */
+
+    num_of_combos_numerator = number_of_items;
+
+    for (numerator_counter = count_start_value;
+        numerator_counter <= (subgroup_size-1); numerator_counter++) {
+
+       num_of_combos_numerator *= (number_of_items - numerator_counter);
+
+    } /* for (numerator_counter) */
+
+    /*
+     * Calculate the denominator of the number of combinations
+     */
+
+    for (denominator_counter = count_start_value;
+        denominator_counter <= subgroup_size; denominator_counter++) {
+
+        num_of_combos_denominator *= denominator_counter;
+
+    } /* for(denominator_counter) */
+
+    /*
+     * Calculate the number of combinations using the numerator and 
+     * denominator values
+     */
+
+    number_of_combos = num_of_combos_numerator/num_of_combos_denominator;
+
+    /*
+     *********************
+     * Output Subsection *
+     *********************
+     *
+     * Output the total number of items, size of the subgroup, and 
+     * number of cominations in a sentence
+     *
+     */
+
+    printf("Given:\n");
+    printf("    The total number of item:  %d\n", number_of_items);
+    printf("    The subgroup size:         %d\n", subgroup_size);
+    printf("The number of combinations possible is %d\n", number_of_combos);
+
+    exit(program_success_code);
+} /* main */
+polk.itsc.ou.edu:bass8424 % make clean
+rm -f my_number
+rm -f census
+rm -f statistics
+rm -f conversions
+rm -f restaurant
+rm -f choose
+polk.itsc.ou.edu:bass8424 % make chose[K[Kose
+gcc -o choose choose.c -lm
+polk.itsc.ou.edu:bass8424 % 52
+52: Command not found.
+polk.itsc.ou.edu:bass8424 % 5
+5: Command not found.
+polk.itsc.ou.edu:bass8424 % 52make choose[35Glean[Khoose[29G52[K[K[Kchos[Kse[K[Kose
+I will tell you the number of combinations available given:
+    Total number of items 
+    Size of the subgroups 
+Please enter the total number of items (must be larger than 0):
+52
+Please input the size of the subgroups (Must be between 0 and the total size)
+5
+Given:
+    The total number of item:  52
+    The subgroup size:         5
+The number of combinations possible is 2598960
+polk.itsc.ou.edu:bass8424 % choose
+I will tell you the number of combinations available given:
+    Total number of items 
+    Size of the subgroups 
+Please enter the total number of items (must be larger than 0):
+18
+Please input the size of the subgroups (Must be between 0 and the total size)
+7
+Given:
+    The total number of item:  18
+    The subgroup size:         7
+The number of combinations possible is 31824
+polk.itsc.ou.edu:bass8424 % choose
+I will tell you the number of combinations available given:
+    Total number of items 
+    Size of the subgroups 
+Please enter the total number of items (must be larger than 0):
+5
+Please input the size of the subgroups (Must be between 0 and the total size)
+2
+Given:
+    The total number of item:  5
+    The subgroup size:         2
+The number of combinations possible is 10
+polk.itsc.ou.edu:bass8424 % choose
+I will tell you the number of combinations available given:
+    Total number of items 
+    Size of the subgroups 
+Please enter the total number of items (must be larger than 0):
+0
+ERROR: The total number of items needs to be greater than 0
+polk.itsc.ou.edu:bass8424 % choose
+I will tell you the number of combinations available given:
+    Total number of items 
+    Size of the subgroups 
+Please enter the total number of items (must be larger than 0):
+5
+Please input the size of the subgroups (Must be between 0 and the total size)
+0
+ERROR: the subgroup size needs to be greater than 0
+polk.itsc.ou.edu:bass8424 % choose
+I will tell you the number of combinations available given:
+    Total number of items 
+    Size of the subgroups 
+Please enter the total number of items (must be larger than 0):
+5
+Please input the size of the subgroups (Must be between 0 and the total size)
+6
+ERROR: the subgroup size needs to be less than the total number of items
+polk.itsc.ou.edu:bass8424 % ^Dexit
+
+Script done on Fri 25 Oct 2013 04:24:57 PM CDT

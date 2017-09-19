@@ -1,0 +1,91 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      2739,         82]
+NotebookOptionsPosition[      2495,         69]
+NotebookOutlinePosition[      2840,         84]
+CellTagsIndexPosition[      2797,         81]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"gpa", "[", 
+    RowBox[{
+    "coursegpa__", ",", "hours__", ",", "QP_", ",", "CH_", ",", "OUQP_", ",", 
+     "OUCH_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"tgpa", ",", "ogpa", ",", "ougpa", ",", "qp", ",", "ch"}], 
+      "}"}], ",", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"qp", "=", 
+        RowBox[{"coursegpa", ".", "hours"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"ch", "=", 
+        RowBox[{"Total", "[", "hours", "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"tgpa", "=", 
+        RowBox[{
+         RowBox[{"qp", "/", "ch"}], "//", "N"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"ougpa", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"OUQP", "+", "qp"}], ")"}], "/", 
+          RowBox[{"(", 
+           RowBox[{"OUCH", "+", "ch"}], ")"}]}], "//", "N"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"ogpa", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"QP", "+", "qp"}], ")"}], "/", 
+          RowBox[{"(", 
+           RowBox[{"CH", "+", "ch"}], ")"}]}], "//", "N"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"StringForm", "[", 
+        RowBox[{
+        "\"\<Term GPA = ``, OU GPA = ``, Overall GPA = ``\>\"", ",", "tgpa", 
+         ",", "ougpa", ",", "ogpa"}], "]"}]}], "\[IndentingNewLine]", "}"}]}],
+     "]"}]}], "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.6078731236444263`*^9, 3.6078731606800632`*^9}, {
+  3.6078731927472844`*^9, 3.607873202356946*^9}, {3.6078733466060147`*^9, 
+  3.6078733812070365`*^9}, {3.6078735749320126`*^9, 3.6078737050890274`*^9}, {
+  3.607873799412459*^9, 3.6078741147509894`*^9}, {3.607874155841098*^9, 
+  3.607874304205933*^9}, {3.6078744536668777`*^9, 3.6078745266531754`*^9}, {
+  3.6082250353923216`*^9, 3.608225035744357*^9}}]
+},
+WindowSize->{707, 867},
+WindowMargins->{{181, Automatic}, {33, Automatic}},
+FrontEndVersion->"9.0 for Microsoft Windows (64-bit) (January 25, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 1934, 47, 232, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

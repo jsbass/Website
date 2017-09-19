@@ -1,0 +1,29 @@
+big_statistics:	big_statistics.c
+		gcc -o big_statistics.c -lm
+
+choose:		choose.c
+		gcc -o choose choose.c -lm
+
+restaurant:	restaurant.c
+		gcc -o restaurant restaurant.c -lm
+
+conversions: 	conversions.c
+		gcc -o conversions conversions.c -lm
+
+statistics: 	statistics.c
+		gcc -o statistics statistics.c -lm
+
+census:		census.c
+		gcc -o census census.c
+
+my_number:	my_number.c
+		gcc -o my_number my_number.c
+
+clean:	
+		rm -f my_number
+		rm -f census
+		rm -f statistics
+		rm -f conversions
+		rm -f restaurant
+		rm -f choose
+		rm -f big_statistics

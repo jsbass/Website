@@ -1,0 +1,5 @@
+// Converts between base 10,2,8,and 16
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JavaScript Solar System | Jacob Bass</title>
+	<script src="JSsolar_system.js"></script>
+	<link href="../../../stylesheet.css" rel="stylesheet" type="text/css">
+    <link href="JSsolar_style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id="top">
+<p>JavaScript Solar System<p>
+</div>
+<div id="sideNav" style="position:absolute; margin-left:-100px; top:100px; left:90%;">
+	<a href="../../../index.html">
+		<div class="navButton" style="margin-top:25px;">Home</div>
+    </a>
+    <a href="../../../about.html">
+    	<div class="navButton">About</div>
+    </a>
+    <a href="../../../resume.html">
+	    <div class="navButton">Resume</div>
+    </a>
+    <a href="../../../apps.html">
+	    <div class="navButton" style="padding-bottom:0;">Stuff</div>
+    </a>
+</div>
+<div id="content"
+    style="width:100%; background-color:black; margin:0; left:0; padding:0; overflow:hidden; border:none">
+
+	<div id="info">
+		<h1>Representation of the Solar System</h1>
+   		<p>Time is scaled down (see Time Dilation)</p>
+        <p>Days are in terms of Earth</p>
+  		<p style="font-size:10px">Made using JavaScript</p>
+	</div>
+    
+    <form id="visForm" action="">
+        <em>Visibility</em><br>
+        <input type="checkbox" name="sun" checked onclick="onCheck(this)">Sun<br>
+        <input type="checkbox" name="mercury" checked onclick="onCheck(this)">Mercury<br>
+        <input type="checkbox" name="venus" checked onclick="onCheck(this)">Venus<br>
+        <input type="checkbox" name="earth" checked onclick="onCheck(this)">Earth<br>
+        <input type="checkbox" name="mars" checked onclick="onCheck(this)">Mars<br>
+        <input type="checkbox" name="asteroid" checked onclick="onCheck(this)">Asteroid Belt<br>
+        <input type="checkbox" name="jupiter" checked onclick="onCheck(this)">Jupiter<br>
+        <input type="checkbox" name="saturn" checked onclick="onCheck(this)">Saturn<br>
+        <input type="checkbox" name="uranus" checked onclick="onCheck(this)">Uranus<br>
+        <input type="checkbox" name="neptune" checked onclick="onCheck(this)">Neptune<br>
+        <input type="checkbox" name="pluto" checked onclick="onCheck(this)">Pluto<br>
+    </form>
+
+    <form id="ctrlForm" action="">                                                                                       <!--Form for Model Info -->
+        <span name="planetName"></span> Revolutions<br>                                                                  <!-- Dynamic Rotation Counter Label -->
+        <textarea cols=10 rows=1 style="resize:none" disabled id="rotCounter"></textarea><br>                            <!-- Revolutions Counter -->
+        Time (Earth days):<br>
+        <textarea cols=10 rows=1 style="resize:none" disabled id="timeCounter"></textarea><br>                           <!-- Time Counter -->
+        Time Dilation:<br>
+        <input type="range" id="timeSlider" max="365" min="1" value="1" oninput="dilateTime(this)"></input><br>          <!-- Time Dilation Slider -->
+        <div id="timeDilation">1 day/sec</div>                                                                           <!-- Time Dilation Gauge -->
+		<button type="button" onclick="incTime(this,-1)"><|</button>                                                     <!-- Increment Time Dilation Back Button -->
+		<button type="button" onclick="incTime(this,1)">|></button><br>                                                  <!-- Increment Time Dilation Forward Button -->
+        <button type="button" onclick="togglePlayback(this)">Pause</button>                                              <!-- Pause Model Button -->
+        <button type="button" onclick="toggleDirection(this)">Rewind</button><br>                                        <!-- Rewind Model Button -->
+        <button type="button" onclick="resetSys()">Reset</button>                                                        <!-- Reset Model Button -->                                                                              <!-- Dynamic Rotation Meter Label -->
+		<canvas id="planetMeter"></canvas>
+    </form>
+
+    <div id="pluto-orbit" class="orbit" onclick="setFocus(this.id)">
+    	<div id="pluto"></div>
+    </div>
+	
+    <div id="neptune-orbit" class="orbit" onclick="setFocus(this.id)">
+    	<div id="neptune"></div>
+    </div>
+    
+    <div id="uranus-orbit" class="orbit" onclick="setFocus(this.id)">
+    	<div id="uranus"></div>
+    </div>
+    
+	<div id="saturn-orbit" class="orbit" onclick="setFocus(this.id)">
+    	<div id="saturn"></div>
+        <div id="saturn-rings"></div>
+    </div>
+    
+    <div id="jupiter-orbit" class="orbit" onclick="setFocus(this.id)">
+    	<div id="jupiter"></div>
+    </div>
+    
+    <div id="asteroid-belt"></div>
+    
+    <div id="mars-orbit" class="orbit" onclick="setFocus(this.id)">
+    	<div id="mars"></div>
+    </div>
+    
+    <div id="earth-orbit" class="orbit" onclick="setFocus(this.id)">
+    	<div id="earth"></div>
+        <div id="moon-orbit">
+        	<div id="moon"></div>
+        </div>
+    </div>
+    
+    <div id="venus-orbit" class="orbit" onclick="setFocus(this.id)">
+    	<div id="venus"></div>
+	</div>
+    
+    <div id="mercury-orbit" class="orbit" onclick="setFocus(this.id)">
+    	<div id="mercury"></div>
+	</div>
+	
+	<div id="sun"></div>
+	
+</div>
+
+<div id="footer">
+	<table>
+		<tr>
+			<td>Jacob S. Bass</td>
+			<td>918.533.5034</td>
+			<td style="border-right:none">bass@ou.edu</td>
+		</tr>
+	</table>
+	<a href="https://www.facebook.com/jacob.s.bass" style="right:10px;">
+		<div class="socialIcon" style="background-position: -86px -46px;"></div>
+	</a>
+	<a href="https://www.linkedin.com/pub/jacob-bass/64/640/84b" style="right:34px;">
+		<div class="socialIcon" style="background-position: -144px -46px;"></div>
+	</a>
+	<a href="https://plus.google.com/115238412652645748783/posts" style="right:58px;">
+		<div class="socialIcon" style="background-position: -173px -46px;"></div>
+	</a>
+	<a href="mailto:bass@ou.edu" style="right:82px;">
+		<div class="socialIcon" style="background-position: -202px -80px;"></div>
+	</a>
+</div>
+
+</body>
+</html>

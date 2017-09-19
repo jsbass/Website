@@ -1,0 +1,16 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ncurses.h>
+
+int main(void){
+
+  int a=0;
+  initscr();
+
+  a = getc(stdin);
+  printf("%c",a);
+  
+  return EXIT_SUCCESS;
+}
+
