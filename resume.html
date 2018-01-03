@@ -2,60 +2,41 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <link href="stylesheet.css" rel="stylesheet" type="text/css" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Resume | Jacob Bass</title>
-</head>
 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Home | Jacob Bass</title>
+</head>
 <body>
-<div id="top">
-<p>Resume<p>
-</div>
-<div id="sideNav">
-	<a href="index.html">
-		<div class="navButton" style="margin-top:25px;">Home</div>
-    </a>
-    <a href="about.html">
-    	<div class="navButton">About</div>
-    </a>
-    <a href="resume.html">
-	    <div class="navButton" id="currentNavButton">Resume</div>
-    </a>
-    <a href="apps.html">
-	    <div class="navButton" style="padding-bottom:0;">Stuff</div>
-    </a>
-</div>
-<div id="content">
-	<object style="position:absolute; top:50px; left:50px;"
-	  width="700px"
-	  height="90%"
-      data="resumes/JacobBass-resume.pdf#page=1&view=fitH"
-      type="application/pdf">
-		<a href="resumes/JacobBass-resume.pdf" style="text-decoration:none; color:#666666">
-			It appears that your browser doesn't support embeded pdf's. Click here to download
-		</a>
-  </object>
-</div>
-<div id="footer">
-	<table>
-		<tr>
-			<td>Jacob S. Bass</td>
-			<td>918.533.5034</td>
-			<td style="border-right:none">bass@ou.edu</td>
-		</tr>
-	</table>
-	<a href="https://www.facebook.com/jacob.s.bass" style="right:10px;">
-		<div class="socialIcon" style="background-position: -86px -46px;"></div>
-	</a>
-	<a href="https://www.linkedin.com/pub/jacob-bass/64/640/84b" style="right:34px;">
-		<div class="socialIcon" style="background-position: -144px -46px;"></div>
-	</a>
-	<a href="https://plus.google.com/115238412652645748783/posts" style="right:58px;">
-		<div class="socialIcon" style="background-position: -173px -46px;"></div>
-	</a>
-	<a href="mailto:bass@ou.edu" style="right:82px;">
-		<div class="socialIcon" style="background-position: -202px -80px;"></div>
-	</a>
-</div>
+	<div id="header">
+		<h1 class="header-title" style="float: left"><a href="/">Jacob S. Bass</a></h1>
+		<div class="dropdown dropdown-hover right" style="float: right;">
+			<div class="dropdown-toggle">
+				Contact
+			</div>
+			<ul class="dropdown-menu">
+				<li class="dropdown-item"><a href="mailto:bass@ou.edu">Email</a></li>
+				<li class="dropdown-item"><a href="tel:+19185335034">Phone</a></li>
+			</ul>
+		</div>
+		<div class="dropdown dropdown-hover right" style="float: right;">
+			<div class="dropdown-toggle">
+				Pages
+			</div>
+			<ul class="dropdown-menu">
+				<li class="dropdown-item"><a href="apps">Apps</a></li>
+				<li class="dropdown-item"><a href="about">About</a></li>
+				<li class="dropdown-item"><a href="resume">Resume</a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="content">
+		<object style="position:absolute; top:50%; left:50%; width: 100%; height: 90%; transform: translate(-50%, -50%);"
+		data="resumes/JacobBass_Resume.pdf#page=1&view=fitH"
+		type="application/pdf">
+			<a href="resumes/JacobBass_Resume.pdf" style="text-decoration:none; color:#666666">
+				It appears that your browser doesn't support embeded pdf's. Click here to download
+			</a>
+		</object>
 </body>
 
 </html>
