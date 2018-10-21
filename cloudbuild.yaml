@@ -1,4 +1,6 @@
 steps:
+- name 'gcr.io/cloud-builders/gcloud'
+  args: ['version']
 artifacts:
   objects:
     location: 'gs://static.jsbass.com'
