@@ -1,3 +1,4 @@
+steps:
 artifacts:
   objects:
     location: 'gs://static.jsbass.com'
