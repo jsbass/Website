@@ -1,0 +1,5 @@
+artifacts:
+  objects:
+    location: 'gs://static.jsbass.com'
+    paths: ['*/**']
+  
