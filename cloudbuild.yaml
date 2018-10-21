@@ -1,4 +1,4 @@
 steps:
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['rsync', '**', 'gs://static.jsbass.com']
+  args: ['rsync', '-d', '-r', '.', 'gs://static.jsbass.com']
   
