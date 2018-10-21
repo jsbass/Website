@@ -7,27 +7,8 @@ this.Graph = function(cvs)
     var data = [];
     var fcns = [];
     window.bStoreData = true;
-    canvas = cvs;
-    
-    var axes_cvs = document.createElement("canvas");
-    canvas.parentNode.appendChild(axes_cvs);
-    axes_cvs.style.position = canvas.style.position;
-    axes_cvs.style.zIndex = canvas.style.zIndex + 1;
-    axes_cvs.style.top = canvas.style.top;
-    axes_cvs.style.left = canvas.style.left;
-    axes_cvs.style.width = canvas.style.width;
-    axes_cvs.style.height = canvas.style.height;
-	
-    var div = document.createElement("div");
-    canvas.parentNode.appendChild(div);
-    div.style.position = canvas.style.position;
-    div.style.top = canvas.style.top;
-    div.style.left = canvas.style.left;
-    div.style.width = canvas.style.width;
-    div.style.height = canvas.style.height;
-    div.style.zIndex = axes_cvs.style.zIndex + 1;
-    div.style.opacity = 0;
-    
+    var canvas = cvs;
+        
     var ctx = canvas.getContext("2d");
     ctx.globalCompositeOperation = 'screen';
     var xmin = -10;
@@ -57,10 +38,11 @@ this.Graph = function(cvs)
     
     function drawData(dat, args)
     {
-        var i, pix, points = dat, color = "#000000", bStore = true;
+        var i, pix, points = dat, color = "#000000", bStore = true, bConnectLines = false;
         
         if(dat instanceof fData)
         {
+			bConnectLines = dat.bConnectLines;
             points = dat.data;
             color = dat.color;
         }
@@ -75,31 +57,38 @@ this.Graph = function(cvs)
                 case 'bStore':
                     bStore = args[prop];
                     break;
+				case 'bConnectLines':
+					bConnectLines = args[prop];
+					break;
             }
         }
         
-        points.sort(function(a, b){return a.x - b.x});
-        
-        pix = pointToPixel(points[0].x,points[0].y);
-        
-        ctx.beginPath();
-		ctx.moveTo(pix.x,pix.y);
-		for(i = 1; i < points.length; i++)
-		{
-            pix = pointToPixel(points[i].x,points[i].y);
-			ctx.lineTo(pix.x,pix.y);
+        //points.sort(function(a, b){return a.x - b.x});
+        ctx.save();
+		ctx.strokeStyle = color;
+		ctx.beginPath();
+        if(bConnectLines) {
+			var pix = pointToPixel(points[0].x,points[0].y);
+			ctx.moveTo(pix.x,pix.y);
+			for(i = 1; i < points.length; i++)
+			{
+				pix = pointToPixel(points[i].x,points[i].y);
+				ctx.lineTo(pix.x,pix.y);
+			}
+		} else {
+			for(var i=0;i<points.length;i++) {
+				var pix = pointToPixel(points[i].x, points[i].y);
+				ctx.moveTo(pix.x+5, pix.y);
+				ctx.arc(pix.x, pix.y, 5, 0, 2*Math.PI);
+			}
 		}
-        
-        ctx.strokeStyle = color;
-        
-        ctx.stroke();
-        ctx.stroke();
-        ctx.stroke();
-        ctx.closePath();
-        
+
+		ctx.stroke();
+		ctx.closePath();
+        ctx.restore();
         if(bStore === undefined || bStore === null ||bStore)
         {
-            data[data.length] = new fData(points, color);
+            data[data.length] = new fData(points, color, bConnectLines);
         }
     }
     this.drawData = drawData;
@@ -175,10 +164,10 @@ this.Graph = function(cvs)
 		switch (axis)
 		{
 		    case 'x':
-				var xPnt = xmin+(x-.5)*((xmax-xmin)/gCanvas.width);
+				var xPnt = xmin+(x-.5)*((xmax-xmin)/canvas.width);
 				break;
 			case 'y':
-				var yPnt = ymin+(gCanvas.height-(y-.5))*((ymax-ymin)/gCanvas.height);
+				var yPnt = ymin+(canvas.height-(y-.5))*((ymax-ymin)/canvas.height);
 		}
 
         return (new Point2D(xPnt, yPnt));
@@ -233,11 +222,6 @@ this.Graph = function(cvs)
         return ctx;
     }
 
-    this.getAxesCanvas = function()
-    {
-        return axes_cvs;
-    }
-
     this.getXLims = function()
     {
         return [xmin, xmax];
@@ -260,27 +244,25 @@ this.Graph = function(cvs)
     
     function drawAxes()
     {
-        var actx = axes_cvs.getContext("2d");
-        
-        actx.clearRect(0,0,axes_cvs.width,axes_cvs.height);
-        
+		ctx.save();
         origin = pointToPixel(0,0);
         
-        actx.beginPath();
-        actx.moveTo(origin.x, 0);
-		actx.lineTo(origin.x, canvas.height);
+        ctx.beginPath();
+        ctx.moveTo(origin.x, 0);
+		ctx.lineTo(origin.x, canvas.height);
 
-		actx.moveTo(0, origin.y);
-		actx.lineTo(canvas.width, origin.y);
-        actx.strokeStyle = "#000000";
-        actx.lineWidth = 1;
-		actx.stroke();
-        actx.closePath();
+		ctx.moveTo(0, origin.y);
+		ctx.lineTo(canvas.width, origin.y);
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 1;
+		ctx.stroke();
+        ctx.closePath();
+		ctx.restore();
     }
 
     function refreshGraph(){
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        
+        drawAxes();
         for(i = 0; i<data.length; i++)
         {
             drawData(data[i],{'bStore':false});
@@ -299,7 +281,7 @@ this.Graph = function(cvs)
 		xmin = min;
 		xmax = max;
         
-        drawAxes();
+        refreshGraph();
     }
 
     this.setYLims = function(min, max)
@@ -307,10 +289,10 @@ this.Graph = function(cvs)
 		ymin = min;
 		ymax = max;
         
-        drawAxes();
+        refreshGraph();
     }
     
-    drawAxes();
+    refreshGraph();
 };
 
 function Point2D(x, y)
@@ -327,8 +309,9 @@ function fFunc(func, color, xlims, params)
     this.params = params;
 }
 
-function fData(data, color)
+function fData(data, color, bConnectLines)
 {
+	this.bConnectLines = bConnectLines;
     this.data = data;
     this.color = color;
 }

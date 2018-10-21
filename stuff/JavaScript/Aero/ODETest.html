@@ -1,0 +1,141 @@
+<html>
+<head>
+	<script src="Runge_Kutta.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+</head>
+<body>
+	
+	
+	<label>dy/dx</label></br>
+	<textarea id="dydx" type="textarea" placeholder="enter dy/dx"></textarea></br>
+	<p>
+		The symbols used in the dy/dx formula are 'x' and 'y'</br>
+		x: is a real number</br>
+		y: can either be number or an array depending on the dimensions of the equation
+	</p>
+	
+	<label>y0: comman seperated list of initial values</label></br>
+	<input id="y0" type="text" placeholder="y0" /></br>
+	
+	<label>t0: single value</label></br>
+	<input id="t0" type="text" placeholder="t0" /></br>
+	
+	<label>t_max: single value</label></br>
+	<input id="t_max" type="text" placeholder="t_max" /></br>
+	
+	<button type="button" onclick="parse_input()">Run</button>
+	<button type="button" onclick="download_data()">Download Result</button>
+	
+	<canvas id="graph"></canvas>
+	<table id="results">
+	</table>
+	
+	<script>
+		var dydxInput = document.getElementById('dydx');
+		var y0Input = document.getElementById('y0');
+		var t0Input = document.getElementById('t0');
+		var t_maxInput = document.getElementById('t_max');
+		var tableElem = document.getElementById('results');
+		var graphCtx = document.getElementById('graph').getContext('2d');
+		var chart = null;
+		var values = [];
+		var dydx = function() { return []; };
+		y0 = 0;
+		tspan = [0,1];
+		
+		function parse_input() {
+			dydx = new Function('x', 'y', dydxInput.value);
+			y0 = y0Input.value.replace(/\s/g,'').split(',').map(s => Number(s) );
+			
+			tspan[0] = Number(t0Input.value);
+			tspan[1] = Number(t_maxInput.value);
+			
+			console.log('dydx');
+			console.log(dydx);
+			console.log('y0');
+			console.log(y0);
+			console.log('tspan');
+			console.log(tspan);
+			
+			values = RungeKuttaSolver(function(x,y) {
+				var result = dydx(x,Array.isArray(y) ? y : [y]);
+				return Array.isArray(result) ? result : [result];
+			}, tspan, y0);
+			
+			var chartData = {
+				type: 'scatter',
+				data: {
+					datasets: []
+				}
+			};
+			
+			for(var i = 1; i < values[0].length; i++) {
+				var dataSet = {
+					label: 'y_' + i,
+					data: []
+				};
+				for(var j=0; j < values.length; j++) {
+					var datum = {
+						x: values[j][0],
+						y: values[j][i]
+					}
+					dataSet.data[dataSet.data.length] = datum;
+				}
+				chartData.data.datasets[chartData.data.datasets.length] = dataSet;
+			}
+			
+			console.log('chartData');
+			console.log(chartData);
+            
+			if(chart) {
+                chart.clear();
+                chart.destroy();
+            }
+            
+			chart = new Chart(graphCtx, chartData);
+			console.log(values);
+			tableElem.innerHTML = '';
+			
+			//Add header
+			html = '<tr><th>t</th>';
+			for(var i=1;i < values[0].length; i++) {
+				html += '<th>y_' + i + '</th>';
+			}
+			html += '</tr>';
+			
+			//Add row data
+			for(var i=0;i < values.length; i++) {
+				var row = '<tr><td>' + values[i][0].toFixed(2) + '</td>';
+				for(var j=1;j < values[i].length;j++) {
+					row += '<th>' + values[i][j].toFixed(2) + '</th>';
+				}
+				row += '</tr>';
+				html+=row;
+			}
+			
+			tableElem.innerHTML = html;
+		}
+		
+		function download_data() {
+			var dataString = "t"
+			for(var i=1;i<values[0].length;i++) {
+				dataString += ',y_' + i;
+			}
+			dataString += '\n';
+			for(var i=0; i< values.length;i++) {
+				dataString += values[i].join(',') + '\n';
+			}
+			csvHeader = 'data:text/csv;charset=utf-8';
+			encodedUri = encodeURI(csvHeader + ',' + dataString);
+			var a = document.createElement('a');
+			a.href = encodedUri;
+			a.target = '_blank';
+			a.rel = 'noopener';
+			a.download = 'data.csv';
+			var evt = document.createEvent('MouseEvents');
+			evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+			a.dispatchEvent(evt);
+		}
+	</script>
+</body>
+</html>

@@ -2,120 +2,237 @@
 <html>
 <head>
 	<title>Vortex Panel Method - NACA foils | Jacob Bass</title>
-	<link href="../../../stylesheet.css" rel="stylesheet" type="text/css">
+	<style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            min-width: 400px;
+            min-height: 400px;
+        }
+        
+		canvas {
+			width: 400px;
+			height: 400px;
+            background-color: white;
+		}
+        
+        #top {
+            margin: auto;
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 200px;
+            width: 100%;
+        }
+        
+        #content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: lightgray;
+            margin-top: 200px;
+            height: 100%;
+            width: 100%;
+        }
+        
+        #content > div {
+            position: relative;
+            width: 600px;
+            margin: 0 auto;
+        }
+        
+        #ctrlForm {
+            position: relative;
+            float: right;
+            width: 100px;
+            height: 100%;
+            background-color: white;
+        }
+    </style>
 </head>
-	<body>
-		<div id="top">
-<p>JavaScript Aerofoil Analysis<p>
-</div>
-<div id="sideNav" style="position:absolute; margin-left:-100px; top:100px; left:90%;">
-	<a href="../../../index.html">
-		<div class="navButton" style="margin-top:25px;">Home</div>
-    </a>
-    <a href="../../../about.html">
-    	<div class="navButton">About</div>
-    </a>
-    <a href="../../../resume.html">
-	    <div class="navButton">Resume</div>
-    </a>
-    <a href="../../../apps.html">
-	    <div class="navButton" style="padding-bottom:0;">Stuff</div>
-    </a>
-</div>
-<div id="content" style="width:100%; margin:0; left:0; padding:0; overflow:hidden; border:none">
-    <div style="position: absolute; width: 760px; height: 600px; left: 50%; margin-left: -380px;">
-        <canvas id = "g1" style="position: absolute; width: 600px; height: 300px; top: 20px; left: 20px;">Airfoil graph</canvas>
-        <canvas id = "g2" style="position: absolute; width: 600px; height: 300px; top: 340px; left: 20px;">Pressure graph</canvas>
-        <form style="padding: 10px; background-color: #FF9999; position: absolute; top: 20px; left: 640px; height: 600px; width: 100px;" id="ctrlForm" action="#" method="POST">
-            Enter NACA 4 or 5 digit number:
-            <input type="text" name="naca_num" size="5" pattern="[0-9]{4,5}" required>
-            <input type="button" name="naca_submit" value="Apply">
-        </form>
+<body>
+    <div id="top">
+        <p>JavaScript Aerofoil Analysis<p>
     </div>
-    
+        <div id="content">
+            <div>
+                <p>Airfoil</p>
+                <canvas width="400" height="400" id = "g1">Airfoil graph</canvas>
+                <p>Pressures</p>
+                <canvas width="400" height="400" id = "g2" style="">Pressure graph</canvas>
+                <form id="ctrlForm" action="#" method="POST">
+					<label for="AoA">Angle of Attack in degrees</label>
+					<input autofocus type="text" size="4" value="0" name="AoA">
+					<label for="num_coords">Number of Coords:</label>
+					<input type="text" size="4" value="20" name="num_coords">
+                    <label for="naca_num">4 Digit NACA number:</label>
+					<input type="text" size="4" value="2412" name="naca_num">
+                    <input type="submit" name="naca_submit" value="Apply">
+                </form>
+        </div>
+    </div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.1.0/math.min.js"></script>
+	<script src="VortexPanel.js"></script>
     <script src="graph.js"></script>
+	<script>
+		function calcNacaCoords(numCoords, num) {
+			var m,p,t;
+            m = parseInt(num[0]).toFixed(2)/100;
+            p = parseInt(num[1]).toFixed(1)/10;
+            t = parseInt(num.slice(2,4)).toFixed(2)/100;
+            console.log(m,p,t);
+            
+            p = m==0 ? 0 : p;
+            m = p==0 ? 0 : m;
+            
+            var upperCoords = [];
+            var lowerCoords = [];
+            var meanCoords = [];
+            
+            var a_0 = 0.2969
+            var a_1 = -0.1260;
+            var a_2 = -0.3516
+            var a_3 = 0.2843;
+            var a_4 = -0.1036;
+            
+            if(p!=0)
+            {
+                for(var i=0;i<numCoords;i++) {
+                    var x_c = (1-Math.cos(Math.PI*i/numCoords))/2;
+                    var y_t = t*(a_0*Math.pow(x_c, 0.5) + a_1*x_c + a_2*Math.pow(x_c, 2) + a_3*Math.pow(x_c, 3) + a_4*Math.pow(x_c, 4))/0.2;
+                    
+                    var dyc_dx = 0;
+                    var y_c = 0;
+                    if(x_c < p) {
+                        y_c = m*x_c*(2*p-x_c)/(p*p);
+                        dyc_dx = 2*m*(p-x_c)/(p*p);
+                    } else {
+                        y_c = m*(1-2*p+2*p*x_c-x_c*x_c)/(1-2*p+p*p);
+                        dyc_dx = 2*m*(p-x_c)/(1-2*p+p*p);
+                    }
+                    
+                    var theta = Math.atan(dyc_dx);
+                    x_u = x_c - y_t*Math.sin(theta);
+                    y_u = y_c + y_t*Math.cos(theta);
+                    x_l = x_c + y_t*Math.sin(theta);
+                    y_l = y_c - y_t*Math.cos(theta);
+                    
+                    meanCoords.push({ x: x_c, y: y_c});
+                    upperCoords.push({ x: x_u, y: y_u });
+                    lowerCoords.push({ x: x_l, y: y_l });
+                }
+            }
+            else
+            {
+                for(var i=0;i<numCoords;i++) {
+                    var x_c = (1-Math.cos(Math.PI*i/numCoords))/2;
+                    var y_t = 5.0*t*(a_0*Math.sqrt(x_c)+a_1*x_c+a_2*Math.pow(x_c,2)+a_3*Math.pow(x_c,3)+a_4*Math.pow(x_c,4));
+                    var y_c = 0;
+                    
+                    x_u = x_c;
+                    y_u = y_t;
+                    x_l = x_c;
+                    y_l = -y_t
+                    
+                    meanCoords.push({ x: x_c, y: y_c});
+                    upperCoords.push({ x: x_u, y: y_u });
+                    lowerCoords.push({ x: x_l, y: y_l });
+                }
+            }
+                        
+            return {
+                t: t,
+                m: m,
+                p: p,
+                coords: {
+                    upper: upperCoords,
+                    lower: lowerCoords,
+                    mean: meanCoords
+                }
+            };
+		}
+		function rotateAbout(pivot_point, p, theta) {
+			return {
+				x: (p.x-pivot_point.x)*Math.cos(theta) - (p.y-pivot_point.y)*Math.sin(theta) + pivot_point.x,
+				y: (p.y-pivot_point.y)*Math.cos(theta) + (p.x-pivot_point.x)*Math.sin(theta) + pivot_point.y
+			}
+		}
+	</script>
     <script>
         g1 = new Graph(document.getElementById("g1"));
         g2 = new Graph(document.getElementById("g2"));
         
         form = document.getElementById("ctrlForm");
-        form.elements["naca_submit"].addEventListener("click",calcAirfoil);
-        
-        function calcAirfoil(event)
-        {
-            var m,p,t;
-            var num = form.elements["naca_num"].value;
-            m = parseInt(num[0]).toFixed(2)/100;
-            p = parseInt(num[1]).toFixed(1)/10;
-            t = parseInt(num.slice(2,4)).toFixed(2)/100;
-            
-            xlims = [0,1];
-            
-            p = m==0 ? 0 : p;
-            m = p==0 ? 0 : m;
-            
-            if(p!=0)
-            {
-                mean = function(x,m,p)
-                {
-                    return m*x/(p*p)*(2*p-x);
-                }
-                upper = function(x)
-                {
-                    return 0;
-                }
-                lower = function(x)
-                {
-                    return 0;
-                }
-            }
-            else
-            {
-                mean = function(x)
-                {
-                    return 0;
-                }
-                upper = function(x,t)
-                {
-                    return 5.0*t*(0.2969*Math.sqrt(x)-0.1260*x-0.3516*Math.pow(x,2)+0.2843*Math.pow(x,3)-0.1036*Math.pow(x,4));
-                }
-                lower = function(x,t)
-                {
-                    return -5.0*t*(0.2969*Math.sqrt(x)-0.1260*x-0.3516*Math.pow(x,2)+0.2843*Math.pow(x,3)-0.1036*Math.pow(x,4));
-                }
-            }
-            
+        form.addEventListener("submit",function(e) {
+            e.preventDefault();
+			var numCoords = e.target.elements["num_coords"].value;
+            var value = e.target.elements["naca_num"].value;
+			var angle = e.target.elements["AoA"].value*Math.PI/180;
+			var data = [
+				{ x: 1, y: 0 },
+				{ x: 0.933, y: -0.005 },
+				{ x: .750, y: -0.017 },
+				{ x: 0.500, y: -0.033 },
+				{ x: 0.250, y: -0.042 },
+				{ x: 0.067, y: -0.033 },
+				{ x: 0.0, y: -0.0 },
+				{ x: 0.067, y: 0.045 },
+				{ x: 0.250, y: 0.076 },
+				{ x: 0.500, y: 0.072 },
+				{ x: 0.750, y: 0.044 },
+				{ x: 0.933, y: 0.013 },
+				{ x: 1, y: 0.0 }				
+			]
+            nacaCoords = calcNacaCoords(numCoords, value);
+            window.coords = nacaCoords.coords;
+			window.combined = nacaCoords.coords.lower.slice(1).reverse().concat(nacaCoords.coords.upper);
+            window.combined[0] = nacaCoords.coords.upper[nacaCoords.coords.upper.length-1];
+			
+			//Graph Airfoil
+			//clear graph and set lims
+			g1.setXLims(0,1);
+            g1.setYLims(-.5, 0.5);
             g1.clearGraph();
-            
-            g1.drawFcn(mean,{'xlims': xlims, 'color':'#6666FF'});
-            g1.drawFcn(upper,{'xlims': xlims, 'color':'#FF3300', 'params':[t]});
-            g1.drawFcn(lower,{'xlims': xlims, 'color':'#3399FF', 'params':[t]});
-            g1.setXLims(0,1);
-            g1.setYLims(-.1,.1);
-        }
+			//rotate calculated airfoil points for AoA
+			var midpoint = { x:0.5,y:0 };
+            g1.drawData(window.coords.upper.map(function(p) {
+				return rotateAbout(midpoint, p, -angle);
+			}), {
+                color: 'red',
+				bConnectLines: true
+            });
+            g1.drawData(window.coords.lower.map(function(p) {
+				return rotateAbout(midpoint, p, -angle);
+			}), {
+                color: 'red',
+				bConnectLines: true
+            });
+            g1.drawData(window.coords.mean.map(function(p) {
+				return rotateAbout(midpoint, p, -angle);
+			}), {
+                color: 'yellow',
+				bConnectLines: true
+            });
+			
+			//Calculate with panel method
+			console.log("caclulating...");
+			window.results = calc_gamma(window.combined, angle);
+			var cp_points = window.results.panels.map(function(p) {
+				return { x: p.c_x, y: p.Cp };
+			});
+			//graph results
+			g2.setXLims(0,1);
+            g2.setYLims(1, -4);
+            g2.clearGraph();
+			g2.drawData(cp_points, {
+				bConnectLines: false,
+				color: 'red'
+			});
+			console.log(window.results);
+        });
     </script>
-</div>
-
-<div id="footer">
-	<table>
-		<tr>
-			<td>Jacob S. Bass</td>
-			<td>918.533.5034</td>
-			<td style="border-right:none">bass@ou.edu</td>
-		</tr>
-	</table>
-	<a href="https://www.facebook.com/jacob.s.bass" style="right:10px;">
-		<div class="socialIcon" style="background-position: -86px -46px;"></div>
-	</a>
-	<a href="https://www.linkedin.com/pub/jacob-bass/64/640/84b" style="right:34px;">
-		<div class="socialIcon" style="background-position: -144px -46px;"></div>
-	</a>
-	<a href="https://plus.google.com/115238412652645748783/posts" style="right:58px;">
-		<div class="socialIcon" style="background-position: -173px -46px;"></div>
-	</a>
-	<a href="mailto:bass@ou.edu" style="right:82px;">
-		<div class="socialIcon" style="background-position: -202px -80px;"></div>
-	</a>
-</div>
-	</body>
+</body>
 </html>
