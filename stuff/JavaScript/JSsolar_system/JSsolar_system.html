@@ -58,12 +58,9 @@
         Time Dilation:<br>
         <input type="range" id="timeSlider" max="365" min="1" value="1" oninput="dilateTime(this)"></input><br>          <!-- Time Dilation Slider -->
         <div id="timeDilation">1 day/sec</div>                                                                           <!-- Time Dilation Gauge -->
-		<button type="button" onclick="incTime(this,-1)"><|</button>                                                     <!-- Increment Time Dilation Back Button -->
-		<button type="button" onclick="incTime(this,1)">|></button><br>                                                  <!-- Increment Time Dilation Forward Button -->
         <button type="button" onclick="togglePlayback(this)">Pause</button>                                              <!-- Pause Model Button -->
         <button type="button" onclick="toggleDirection(this)">Rewind</button><br>                                        <!-- Rewind Model Button -->
-        <button type="button" onclick="resetSys()">Reset</button>                                                        <!-- Reset Model Button -->                                                                              <!-- Dynamic Rotation Meter Label -->
-		<canvas id="planetMeter"></canvas>
+        <button type="button" onclick="resetSys()">Reset</button>                                                        <!-- Reset Model Button -->
     </form>
 
     <div id="pluto-orbit" class="orbit" onclick="setFocus(this.id)">
