@@ -7,13 +7,16 @@
 </head>
 
 <body>
+<div>
+	<p>This app tests a from scratch rendering engine. Randomly generates a grid of varying heights. Arrow Keys to turn. ASWD to move. QE to go up or down. Controls need fixed but renderer works.</p>
+</div>
 <canvas id="viewport" style="border: 1px black solid">
 Your Browser Does not Support Canvas Tags
 </canvas>
 <script>
 
 	var keyState = {}
-	    document.onload = function(){
+	document.onload = function(){
 		var canvas = document.getElementById("viewport");
 
 		canvas.style.width='100%';

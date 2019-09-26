@@ -46,7 +46,7 @@ function onResize(){
 	contentSize = $.getElementById("content").offsetHeight;
 	console.log("content height: " + contentSize);
 	for(obj in bodies){
-		console.log(obj + " height set to " contentSize*bodies[obj].orbitFraction)
+		console.log(obj + " height set to " + contentSize*bodies[obj].orbitFraction)
 		$.getElementById(bodies[obj].id).style.height = (contentSize*bodies[obj].orbitFraction) + "px";
 	}
 }
