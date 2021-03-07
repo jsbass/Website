@@ -81,6 +81,7 @@ function calc_gamma(points, alpha) {
 	var Gamma = math.usolve(math.transpose(An), RHS);
 	
 	var c_l = 0;
+	var c_d = 0;
 	//calc Vd, Cp, c_l
 	for(var i=0;i<panels.length;i++) {
 		var sum = 0;
@@ -91,6 +92,7 @@ function calc_gamma(points, alpha) {
 		panels[i].V = Math.cos(panels[i].theta - alpha) + sum;
 		panels[i].Cp = 1 - Math.pow(panels[i].V, 2);
 		c_l += panels[i].Cp*panels[i].l*Math.cos(panels[i].theta-alpha);
+		c_d += panels[i].Cp*panels[i].l*Math.sin(panels[i].theta-alpha);
 	}
 	return {
 		panels: panels,
@@ -98,6 +100,8 @@ function calc_gamma(points, alpha) {
 		An: An,
 		At: At,
 		c_l: c_l,
+		c_d: c_d,
+		aoa: alpha,
 		RHS: RHS
 	}
 }

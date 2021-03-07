@@ -258,6 +258,8 @@ this.Graph = function(cvs)
 		ctx.stroke();
         ctx.closePath();
 		ctx.restore();
+
+        //draw increment lines and labels
     }
 
     function refreshGraph(){

@@ -6,8 +6,6 @@
         html, body {
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
             min-width: 400px;
             min-height: 400px;
         }
@@ -37,19 +35,43 @@
             height: 100%;
             width: 100%;
         }
-        
-        #content > div {
+
+        .row {
             position: relative;
-            width: 600px;
-            margin: 0 auto;
+            width: 100%;
+            padding: 10px 50px;
+            display: inline-block;
+        }        
+
+        .graph {
+            position: relative;
+            float: left;
         }
-        
-        #ctrlForm {
+
+        .graph > canvas {
+            height: 400px;
+            width: 400px;
+        }
+
+        .graph > p {
+            line-height: 20px;
+        }
+        .graph ~ .graph {
+            margin-left: 20px;
+        }
+
+        .control {
             position: relative;
-            float: right;
-            width: 100px;
-            height: 100%;
+            float: left;
+            width: 200px;
             background-color: white;
+            margin-left: 20px;
+            margin-top: 50px;
+            padding: 5px;
+        }
+
+        .control > * ~ * {
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -57,21 +79,51 @@
     <div id="top">
         <p>JavaScript Aerofoil Analysis<p>
     </div>
-        <div id="content">
-            <div>
+    <div id="content">
+        <div class="row">
+            <div class="graph">
                 <p>Airfoil</p>
-                <canvas width="400" height="400" id = "g1">Airfoil graph</canvas>
+                <canvas id="airfoilGraph">Airfoil graph</canvas>
+            </div>
+            <div class="graph">
                 <p>Pressures</p>
-                <canvas width="400" height="400" id = "g2" style="">Pressure graph</canvas>
-                <form id="ctrlForm" action="#" method="POST">
-					<label for="AoA">Angle of Attack in degrees</label>
-					<input autofocus type="text" size="4" value="0" name="AoA">
-					<label for="num_coords">Number of Coords:</label>
-					<input type="text" size="4" value="20" name="num_coords">
-                    <label for="naca_num">4 Digit NACA number:</label>
-					<input type="text" size="4" value="2412" name="naca_num">
-                    <input type="submit" name="naca_submit" value="Apply">
-                </form>
+                <canvas id="pressureGraph">Pressure graph</canvas>
+            </div>
+            <div class="control">
+                <label for="AoA">Angle of Attack in degrees</label><br/>
+                <input autofocus type="text" size="4" value="0" name="AoA" id="AoA"><br/>
+                <label for="num_coords">Number of Coords:</label><br/>
+                <input type="text" size="4" value="20" name="num_coords" id="num_coords"><br/>
+                <label for="naca_num">4 Digit NACA number:</label><br/>
+                <input type="text" size="4" value="2412" name="naca_num" id="naca_num"><br/>
+                <input type="button" id="calcSingleButton" value="Apply">
+            </div>
+            <div class="control">
+                <ul>
+                    TODO:
+                    <li>Convert graph library from custom simple implementation to established library</li>
+                    <li>Pressures look good. Figure out c_l and c_d errors.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="graph">
+                <p>c_l vs AoA</p>
+                <canvas id="cl_aoa_graph">c_l vs. AoA Graph</canvas>
+            </div>
+            <div class="graph">
+                <p>c_l vs c_d</p>
+                <canvas id="cl_cd_graph">c_l vs. c_d Graph</canvas>
+            </div>
+            <div class="control">
+                <label for="AoARangeStart">AoA Range Start</label><br/>
+                <input type="number" min="-90" max="90" name="AoARangeStart" id="AoARangeStart" value="0"/><br/>
+                <label for="AoARangeEnd">AoA Range Stop</label><br/>
+                <input type="number" min="-90" max="90" name="AoARangeEnd" id="AoARangeEnd" value="20"/><br/>
+                <label for="numSamples">AoA Increments</label><br/>
+                <input type="number" name="numSamples" id="numSamples" value="10"/><br/>
+                <input type="button" id="calcRangeButton" value="Apply" />
+            </div>
         </div>
     </div>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.1.0/math.min.js"></script>
@@ -162,77 +214,134 @@
 		}
 	</script>
     <script>
-        g1 = new Graph(document.getElementById("g1"));
-        g2 = new Graph(document.getElementById("g2"));
-        
-        form = document.getElementById("ctrlForm");
-        form.addEventListener("submit",function(e) {
-            e.preventDefault();
-			var numCoords = e.target.elements["num_coords"].value;
-            var value = e.target.elements["naca_num"].value;
-			var angle = e.target.elements["AoA"].value*Math.PI/180;
-			var data = [
-				{ x: 1, y: 0 },
-				{ x: 0.933, y: -0.005 },
-				{ x: .750, y: -0.017 },
-				{ x: 0.500, y: -0.033 },
-				{ x: 0.250, y: -0.042 },
-				{ x: 0.067, y: -0.033 },
-				{ x: 0.0, y: -0.0 },
-				{ x: 0.067, y: 0.045 },
-				{ x: 0.250, y: 0.076 },
-				{ x: 0.500, y: 0.072 },
-				{ x: 0.750, y: 0.044 },
-				{ x: 0.933, y: 0.013 },
-				{ x: 1, y: 0.0 }				
-			]
-            nacaCoords = calcNacaCoords(numCoords, value);
-            window.coords = nacaCoords.coords;
-			window.combined = nacaCoords.coords.lower.slice(1).reverse().concat(nacaCoords.coords.upper);
-            window.combined[0] = nacaCoords.coords.upper[nacaCoords.coords.upper.length-1];
-			
-			//Graph Airfoil
-			//clear graph and set lims
-			g1.setXLims(0,1);
-            g1.setYLims(-.5, 0.5);
-            g1.clearGraph();
-			//rotate calculated airfoil points for AoA
-			var midpoint = { x:0.5,y:0 };
-            g1.drawData(window.coords.upper.map(function(p) {
-				return rotateAbout(midpoint, p, -angle);
-			}), {
-                color: 'red',
-				bConnectLines: true
-            });
-            g1.drawData(window.coords.lower.map(function(p) {
-				return rotateAbout(midpoint, p, -angle);
-			}), {
-                color: 'red',
-				bConnectLines: true
-            });
-            g1.drawData(window.coords.mean.map(function(p) {
-				return rotateAbout(midpoint, p, -angle);
-			}), {
-                color: 'yellow',
-				bConnectLines: true
-            });
-			
-			//Calculate with panel method
-			console.log("caclulating...");
-			window.results = calc_gamma(window.combined, angle);
-			var cp_points = window.results.panels.map(function(p) {
-				return { x: p.c_x, y: p.Cp };
-			});
-			//graph results
-			g2.setXLims(0,1);
-            g2.setYLims(1, -4);
-            g2.clearGraph();
-			g2.drawData(cp_points, {
-				bConnectLines: false,
-				color: 'red'
-			});
-			console.log(window.results);
-        });
+        window.onload = function() {
+            airfoilGraph = new Graph(document.getElementById("airfoilGraph"));
+            airfoilGraph.setXLims(0,1);
+            airfoilGraph.setYLims(-.5, 0.5);
+            airfoilGraph.clearGraph();
+
+            pressuresGraph = new Graph(document.getElementById("pressureGraph"));
+            pressuresGraph.setXLims(0,1);
+            pressuresGraph.setYLims(1, -4);
+            pressuresGraph.clearGraph();
+
+            clVsAoaGraph = new Graph(document.getElementById("cl_aoa_graph"));
+            clVsAoaGraph.setXLims(0,1);
+            clVsAoaGraph.setYLims(-1, 2);
+            clVsAoaGraph.clearGraph();
+
+            clVsCdGraph = new Graph(document.getElementById("cl_cd_graph"));
+            clVsCdGraph.setXLims(0,2);
+            clVsCdGraph.setYLims(-1,2);
+            clVsCdGraph.clearGraph();
+
+            numCoordsElem = document.getElementById("num_coords");
+            nacaElem = document.getElementById("naca_num");
+            aoaElem = document.getElementById("AoA");
+            calcSingleButton = document.getElementById("calcSingleButton");
+
+            aoaRangeElemStart = document.getElementById("AoARangeStart");
+            aoaRangeElemEnd = document.getElementById("AoARangeEnd");
+            numIncrementsElem = document.getElementById("numSamples");
+            calcRangeButton = document.getElementById("calcRangeButton");
+
+            function calcSingle(coords, combined, angle) {
+                //Graph Airfoil
+                airfoilGraph.clearGraph();
+
+                //rotate calculated airfoil points for AoA
+                var midpoint = { x:0.5,y:0 };
+                airfoilGraph.drawData(coords.upper.map(function(p) {
+                    return rotateAbout(midpoint, p, -angle);
+                }), {
+                    color: 'red',
+                    bConnectLines: true
+                });
+                airfoilGraph.drawData(coords.lower.map(function(p) {
+                    return rotateAbout(midpoint, p, -angle);
+                }), {
+                    color: 'red',
+                    bConnectLines: true
+                });
+                airfoilGraph.drawData(coords.mean.map(function(p) {
+                    return rotateAbout(midpoint, p, -angle);
+                }), {
+                    color: 'yellow',
+                    bConnectLines: true
+                });
+                
+                //Calculate with panel method
+                console.log("caclulating...");
+                results = calc_gamma(combined, angle);
+                var cp_points = results.panels.map(function(p) {
+                    return { x: p.c_x, y: p.Cp };
+                });
+                
+                pressuresGraph.clearGraph();
+                pressuresGraph.drawData(cp_points, {
+                    bConnectLines: false,
+                    color: 'red'
+                });
+                return results;
+            }
+
+            calcSingleButton.onclick = function() {
+                var numCoords = numCoordsElem.value;
+                var value = nacaElem.value;
+                var aoa = aoaElem.value;
+
+                nacaCoords = calcNacaCoords(numCoords, value);
+                window.coords = nacaCoords.coords;
+                window.combined = nacaCoords.coords.lower.slice(1).reverse().concat(nacaCoords.coords.upper);
+                window.combined[0] = nacaCoords.coords.upper[nacaCoords.coords.upper.length-1];
+
+                console.log(calcSingle(window.coords, window.combined, aoa));
+            }
+
+            calcRangeButton.onclick = function() {
+                var numCoords = numCoordsElem.value;
+                var value = nacaElem.value;
+                var aoa = aoaElem.value || 0;
+                var aoaRangeStart = aoaRangeElemStart.value;
+                var aoaRangeEnd = aoaRangeElemEnd.value;
+                var numIncrements = numIncrementsElem.value;
+
+                nacaCoords = calcNacaCoords(numCoords, value);
+                window.coords = nacaCoords.coords;
+                window.combined = nacaCoords.coords.lower.slice(1).reverse().concat(nacaCoords.coords.upper);
+                window.combined[0] = nacaCoords.coords.upper[nacaCoords.coords.upper.length-1];
+
+                console.log(calcSingle(window.coords, window.combined, aoa));
+
+                //Calculate with panel method for each AoA
+                console.log("caclulating...");
+
+                var increment = (aoaRangeEnd - aoaRangeStart) / numIncrements;
+                results = [];
+                for(var i=0; i < numIncrements; i++) {
+                    var angle = aoaRangeStart + i*increment;
+                    results[i] = calc_gamma(combined, angle);
+                }
+
+                console.log(results);
+                clVsAoaGraph.clearGraph();
+                clVsAoaGraph.setXLims(aoaRangeStart, aoaRangeEnd);
+                clVsAoaGraph.drawData(results.map(function(r) {
+                    return {
+                        x: r.aoa,
+                        y: r.c_l
+                    }
+                }));
+
+                clVsCdGraph.clearGraph();
+                clVsCdGraph.drawData(results.map(function(r) {
+                    return {
+                        x: r.c_d,
+                        y: r.c_l
+                    }
+                }));
+            }
+        }
     </script>
 </body>
 </html>
