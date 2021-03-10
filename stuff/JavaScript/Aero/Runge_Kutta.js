@@ -1,13 +1,11 @@
 var RungeKuttaSolver = (function () {
 	function solver(odefun, tspan, y0) {
 		if(!Array.isArray(tspan) || tspan.length < 2) {
-			console.error('tspan must be an array of length two');
-			return;
+			throw 'tspan must be an array of length two';
 		}
 		var dt = (tspan[1] - tspan[0]) / 1000;
 		if(dt <= 0) {
-			console.error('t0 must be greater than t_max.');
-			return;
+			throw 't_max must be greater than t0.';
 		}
 		console.log('dt');
 		console.log(dt);

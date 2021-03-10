@@ -1,6 +1,12 @@
 @charset "utf-8";
 /* CSS Document */
 
+#content > * {
+	font-family:"Courier New", Courier, monospace;
+	font-size:1em;
+	color:white;
+}
+
 .orbit {
 	border-width:1px;
 	border-style:dashed;
@@ -306,16 +312,15 @@
 	text-align:inherit;
 	top: inherit;
     
-    color:white;
+	
 	font-family:"Courier New", Courier, monospace;
-	text-decoration:none;
+	color:white;
 	font-size:18px;
 }
 
 #info p{
 	position:static;
 	margin:auto;
-	color:white;
     
 	color:white;
 	font-family:"Courier New", Courier, monospace;
@@ -344,25 +349,13 @@
     color:white;
 }
 
-* h1 {
-	position:absolute;
-	width:100%;
-	text-align:center;
-	top: -35px;
-	
-	text-decoration:underline;
-	color:white;
-	font-family:"Courier New", Courier, monospace;
+* h2 {
 	font-size:14px;
 }
 
 * p{
 	position:absolute;
 	margin:0 0 -.5em -.3em;
-	
-	font-family:"Courier New", Courier, monospace;
-	font-size:1em;
-	color:white;
 }
 
 .handWrapper {

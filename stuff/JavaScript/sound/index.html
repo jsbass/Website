@@ -1,131 +1,155 @@
 <html>
 <head>
+    <link rel="stylesheet" href="/stylesheet.css" type="text/css"/>
     <link rel="stylesheet" href="stylesheet.css" type="text/css"/>
 </head>
 <body>
-    <div>Shot split timer that uses the JS Audio API to determine loud sounds and run a shot timer. Contains a threshold slider, timer, counter, time limit, and shot limit</div>
-    <div>
-        <h3 id="volume-value">0</h3>
-        <h3 id="count-value">0</h3>
-        <h3 id="time-value">0.00</h3>
-        <input style="width: 100%;" type="range" value="100" min="0" max="4000" oninput="trial.threshold = this.value; document.getElementById('threshold-value').innerText = trial.threshold;"/><p id="threshold-value">100</p>
-        <button type="button" id="play-button" onclick="togglePlay()">Start</button>
-        <h3 id="time-value"></h3>
-        <div id="shot-table-container">
-            <table id="shot-table">
-                <thead>
-                    <tr>
-                        <th>Shot</th>
-                        <th>Split</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+    <div id="header">
+		<h1 class="header-title" style="float: left"><a href="/">Jacob S. Bass</a></h1>
+		<div class="dropdown dropdown-hover right" style="float: right;">
+			<div class="dropdown-toggle">
+				Contact
+			</div>
+			<ul class="dropdown-menu">
+				<li class="dropdown-item"><a href="mailto:seabass992@gmail.com">Email</a></li>
+				<li class="dropdown-item"><a href="tel:+19185335034">Phone</a></li>
+			</ul>
+		</div>
+		<div class="dropdown dropdown-hover right" style="float: right;">
+			<div class="dropdown-toggle">
+				Pages
+			</div>
+			<ul class="dropdown-menu">
+				<li class="dropdown-item"><a href="/apps.html">Apps</a></li>
+				<li class="dropdown-item"><a href="/about.html">About</a></li>
+				<li class="dropdown-item"><a href="/resume.html">Resume</a></li>
+			</ul>
+		</div>
+	</div>
+    <div id="content">
+        <div>Shot split timer that uses the JS Audio API to determine loud sounds and run a shot timer. Contains a threshold slider, timer, counter, time limit, and shot limit</div>
+        <div>
+            <lable>Peak Volume</lable><input type="text" id="volume-value" value="0" /><br/>
+            <label>Shot Count</label><input type="text" id="count-value" value="0" /><br/>
+            <label>Time</label><input type="text" id="time-value" value="0.00" /><br/>
+            <input style="width: 100%;" type="range" value="100" min="0" max="4000" oninput="trial.threshold = this.value; document.getElementById('threshold-value').innerText = trial.threshold;"/><p id="threshold-value">100</p>
+            <button type="button" id="play-button" onclick="togglePlay()">Start</button>
+            <div id="shot-table-container">
+                <table id="shot-table">
+                    <thead>
+                        <tr>
+                            <th>Shot</th>
+                            <th>Split</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            
         </div>
-        
+        <div>
+            <div class="increment-group" id="shot-limit">
+                <div class="minus" onclick="adjustShots(-1)">-</div><!--
+            --><div class="value">-</div><!--
+            --><div class="plus" onclick="adjustShots(1)">+</div>
+            </div>
+            <div class="increment-group" id="time-limit">
+                <div class="double-minus" onclick="adjustTime(-1000)">--</div><!--
+            --><div class="minus" onclick="adjustTime(-100)">-</div><!--
+            --><div class="value">-</div><!--
+            --><div class="plus" onclick="adjustTime(100)">+</div><!--
+            --><div class="double-plus" onclick="adjustTime(1000)">++</div>
+            </div>
+        </div>
+        <script src="PeakSoundDetector.js"></script>
+        <script src="ShotTimer.js"></script>
+        <script src="dialog.js"></script>
+        <script src="ResourceManager.js"></script>
+        <script>
+            var btn = document.getElementById('play-button');
+            var togglePlay = function() {
+                if(btn.innerText === 'Start'){
+                    trial.start();
+                }
+                else {
+                    trial.stop();
+                }
+            }
+            
+            var timeValue = document.getElementById("time-limit").getElementsByClassName("value")[0];
+            var adjustTime = function (amount) {
+                trial.max_time += amount;
+                if(trial.max_time <= 0) {
+                    trial.max_time = 0;
+                    timeValue.innerText = "-";
+                } else {
+                    timeValue.innerText = (trial.max_time / 1000).toFixed(2);
+                }
+            }
+    
+            var shotValue = document.getElementById("shot-limit").getElementsByClassName("value")[0];
+            var adjustShots = function (amount) {
+                trial.max_shots += amount;
+                if(trial.max_shots <= 0) {
+                    trial.max_shots = 0;
+                    shotValue.innerText = "-";
+                } else {
+                    shotValue.innerText = trial.max_shots;
+                }
+            }
+    
+            var actx = new AudioContext();
+            var volElem = document.getElementById('volume-value');
+            var countElem = document.getElementById('count-value');
+            var shotTable = document.getElementById('shot-table');
+            var timeElem = document.getElementById('time-value');
+            var peakDetector = actx.createPeakSoundDetector();
+            var trial = new Trial(peakDetector, 100, function(time, shots) {
+                timeElem.value = (time / 1000).toFixed(2);
+                countElem.value = shots.length;
+                volElem.value = Math.round(peakDetector.volume * 1000);
+                shotTable.tBodies = [];
+                shotTable.tBodies[0].innerHTML = '';
+                for(var i=0;i<shots.length;i++) {
+                    var time = shots[i] / 1000;
+                    var split = (i==0 ? shots[i] : shots[i] - shots[i-1]) / 1000;
+                    var row = document.createElement('tr');
+                    row.innerHTML = "<td>" + (i + 1) + "</td><td>" + time.toFixed(2) + "</td><td>" + split.toFixed(2) + "</td>";
+                    shotTable.tBodies[0].appendChild(row);
+                }
+            }, (function(btn) {
+                return function() {
+                    btn.innerText = 'Stop';
+                };
+            })(btn), (function(btn) {
+                return function() {
+                    btn.innerText = 'Start';
+                };
+            })(btn));
+            var count = 0;
+            
+            navigator.getUserMedia({
+                audio: true,
+            }, function(stream) {
+                var mic = actx.createMediaStreamSource(stream);
+                mic.connect(peakDetector.input);
+                peakDetector.connect(actx.destination);
+            }, function () {
+                console.error("error getting microphone");
+            });
+            
+            function checkVolume(dt) {
+                vol = Math.round(peakDetector.volume * 1000);
+                volElem.value = vol;
+                if(vol > threshold && prevVol <= threshold) {
+                    count++;
+                }
+                prevVol = vol;
+                countElem.value = count;
+            }
+        </script>
     </div>
-    <div>
-        <div class="increment-group" id="shot-limit">
-            <div class="minus" onclick="adjustShots(-1)">-</div><!--
-        --><div class="value">-</div><!--
-        --><div class="plus" onclick="adjustShots(1)">+</div>
-        </div>
-        <div class="increment-group" id="time-limit">
-            <div class="double-minus" onclick="adjustTime(-1000)">--</div><!--
-        --><div class="minus" onclick="adjustTime(-100)">-</div><!--
-        --><div class="value">-</div><!--
-        --><div class="plus" onclick="adjustTime(100)">+</div><!--
-        --><div class="double-plus" onclick="adjustTime(1000)">++</div>
-        </div>
-    </div>
-    <script src="PeakSoundDetector.js"></script>
-    <script src="ShotTimer.js"></script>
-    <script src="dialog.js"></script>
-    <script src="ResourceManager.js"></script>
-    <script>
-        var btn = document.getElementById('play-button');
-        var togglePlay = function() {
-            if(btn.innerText === 'Start'){
-                trial.start();
-            }
-            else {
-                trial.stop();
-            }
-        }
-        
-        var timeValue = document.getElementById("time-limit").getElementsByClassName("value")[0];
-        var adjustTime = function (amount) {
-            trial.max_time += amount;
-            if(trial.max_time <= 0) {
-                trial.max_time = 0;
-                timeValue.innerText = "-";
-            } else {
-                timeValue.innerText = trial.max_time / 1000;
-            }
-        }
-
-        var shotValue = document.getElementById("shot-limit").getElementsByClassName("value")[0];
-        var adjustShots = function (amount) {
-            trial.max_shots += amount;
-            if(trial.max_shots <= 0) {
-                trial.max_shots = 0;
-                shotValue.innerText = "-";
-            } else {
-                shotValue.innerText = trial.max_shots;
-            }
-        }
-
-        var actx = new AudioContext();
-        var volElem = document.getElementById('volume-value');
-        var countElem = document.getElementById('count-value');
-        var shotTable = document.getElementById('shot-table');
-        var timeElem = document.getElementById('time-value');
-        var peakDetector = actx.createPeakSoundDetector();
-        var trial = new Trial(peakDetector, 100, function(time, shots) {
-            timeElem.innerText = time / 1000;
-            countElem.innerText = shots.length;
-            volElem.innerText = Math.round(peakDetector.volume * 1000);
-            shotTable.tBodies = [];
-            shotTable.tBodies[0].innerHTML = '';
-            for(var i=0;i<shots.length;i++) {
-                var time = shots[i] / 1000;
-                var split = (i==0 ? shots[i] : shots[i] - shots[i-1]) / 1000;
-                var row = document.createElement('tr');
-                row.innerHTML = "<td>" + (i + 1) + "</td><td>" + Math.round(time * 100) / 100 + "</td><td>" + Math.round(split * 100) / 100 + "</td>";
-                shotTable.tBodies[0].appendChild(row);
-            }
-        }, (function(btn) {
-            return function() {
-                btn.innerText = 'Stop';
-            };
-        })(btn), (function(btn) {
-            return function() {
-                btn.innerText = 'Start';
-            };
-        })(btn));
-        var count = 0;
-        
-        navigator.getUserMedia({
-            audio: true,
-        }, function(stream) {
-            var mic = actx.createMediaStreamSource(stream);
-            mic.connect(peakDetector.input);
-            peakDetector.connect(actx.destination);
-        }, function () {
-            console.error("error getting microphone");
-        });
-        
-        function checkVolume(dt) {
-            vol = Math.round(peakDetector.volume * 1000);
-            volElem.innerText = vol;
-            if(vol > threshold && prevVol <= threshold) {
-                count++;
-            }
-            prevVol = vol;
-            countElem.innerText = count;
-        }
-    </script>
 </body>
 </html>

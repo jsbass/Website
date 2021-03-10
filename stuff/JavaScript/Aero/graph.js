@@ -11,6 +11,12 @@ this.Graph = function(cvs)
         
     var ctx = canvas.getContext("2d");
     ctx.globalCompositeOperation = 'screen';
+
+    window.addEventListener('resize', refreshGraph);
+    function resetPicture() {
+		ctx.canvas.width = ctx.canvas.offsetWidth;
+		ctx.canvas.height = ctx.canvas.offsetHeight;
+    }
     var xmin = -10;
     var xmax = 10;
     var ymin = -10;
@@ -79,7 +85,7 @@ this.Graph = function(cvs)
 			for(var i=0;i<points.length;i++) {
 				var pix = pointToPixel(points[i].x, points[i].y);
 				ctx.moveTo(pix.x+5, pix.y);
-				ctx.arc(pix.x, pix.y, 5, 0, 2*Math.PI);
+				ctx.arc(pix.x, pix.y, Math.max(1,Math.min(5,500/points.length)), 0, 2*Math.PI);
 			}
 		}
 
@@ -263,6 +269,7 @@ this.Graph = function(cvs)
     }
 
     function refreshGraph(){
+        resetPicture();
         ctx.clearRect(0,0,canvas.width,canvas.height);
         drawAxes();
         for(i = 0; i<data.length; i++)

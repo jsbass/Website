@@ -1,6 +1,7 @@
 * {
 	box-sizing: border-box;
-	font-family: "Open Sans";
+	
+	font-family:"Courier New", Courier, monospace;
 }
 
 html, body {
@@ -9,12 +10,25 @@ html, body {
 	background-color: white;
 }
 
-a {
+#header > h1 > a, #header > h1 > a:visited {
 	color: #222;
+}
+
+a {
+	color: cadetblue;
 	text-decoration: none;
+	outline: #222;
+	font-weight: bold;
+}
+
+a:visited {
+	color: cadetblue;
+	outline: #222;
+	font-weight: bold;
 }
 
 #header {
+	background-color: white;
 	width: calc(100% - 40px);
 	top: 0;
 	left: 0;

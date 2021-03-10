@@ -2,7 +2,7 @@
  ******************************************************************************
  *** Project 3.5: Combinations                                              ***
  *** Program: choose                                                        ***
- *** Author: Jacob Bass (bass@ou.edu                                        ***
+ *** Author: Jacob Bass (seabass992@gmail.com                                        ***
  *** Class: CS 1313 010 Computer Programming, Fall 2013                     ***
  *** Lab: Sec 015 Fridays 3:30pm                                            ***
  *** Description: Takes the user input, total number of items available and ***

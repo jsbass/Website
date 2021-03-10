@@ -2,6 +2,8 @@
 <html>
 <head>
 	<title>Vortex Panel Method - NACA foils | Jacob Bass</title>
+    
+    <link href="/stylesheet.css" rel="stylesheet" type="text/css" />
 	<style>
         html, body {
             margin: 0;
@@ -19,23 +21,12 @@
         #top {
             margin: auto;
             text-align: center;
-            position: absolute;
+            position: relative;
             top: 0;
             left: 0;
-            height: 200px;
             width: 100%;
         }
         
-        #content {
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-color: lightgray;
-            margin-top: 200px;
-            height: 100%;
-            width: 100%;
-        }
-
         .row {
             position: relative;
             width: 100%;
@@ -64,7 +55,7 @@
             position: relative;
             float: left;
             width: 200px;
-            background-color: white;
+            background-color: lightgray;
             margin-left: 20px;
             margin-top: 50px;
             padding: 5px;
@@ -76,10 +67,32 @@
     </style>
 </head>
 <body>
-    <div id="top">
-        <p>JavaScript Aerofoil Analysis<p>
-    </div>
+    <div id="header">
+		<h1 class="header-title" style="float: left"><a href="/">Jacob S. Bass</a></h1>
+		<div class="dropdown dropdown-hover right" style="float: right;">
+			<div class="dropdown-toggle">
+				Contact
+			</div>
+			<ul class="dropdown-menu">
+				<li class="dropdown-item"><a href="mailto:seabass992@gmail.com">Email</a></li>
+				<li class="dropdown-item"><a href="tel:+19185335034">Phone</a></li>
+			</ul>
+		</div>
+		<div class="dropdown dropdown-hover right" style="float: right;">
+			<div class="dropdown-toggle">
+				Pages
+			</div>
+			<ul class="dropdown-menu">
+				<li class="dropdown-item"><a href="/apps.html">Apps</a></li>
+				<li class="dropdown-item"><a href="/about.html">About</a></li>
+				<li class="dropdown-item"><a href="/resume.html">Resume</a></li>
+			</ul>
+		</div>
+	</div>
     <div id="content">
+        <div id="top">
+            <h1>JavaScript Aerofoil Analysis</h1>
+        </div>
         <div class="row">
             <div class="graph">
                 <p>Airfoil</p>

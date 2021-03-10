@@ -50,13 +50,13 @@ var Trial = function (peakDetector, threshold, onRender, onStart, onStop) {
         dt = now - old;
         time += dt;
         vol = Math.round(peakDetector.volume * 1000);
-        volElem.innerText = vol;
+        volElem.value = vol;
         if(vol > _this.threshold && prevVol <= _this.threshold) {
             console.log('Shot!');
             shots[shots.length] = time;
         }
         prevVol = vol;
-        countElem.innerText = count;
+        countElem.value = count;
         old = now;
         _this.onRender(time, shots);
         if(_this.max_time > 0 && time >= _this.max_time) {

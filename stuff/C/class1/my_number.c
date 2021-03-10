@@ -3,7 +3,7 @@
  **********************************************************************
  *** Project #1:  Thinking of a Number                              ***
  *** Program:     my_number                                         ***
- *** Author:      Jacob Bass (bass@ou.edu                           ***
+ *** Author:      Jacob Bass (seabass992@gmail.com                           ***
  *** Class:       CS 1313 010 Computer Programming, Fall 2013       ***
  *** Lab:         Sec 015 Fridays 3:30pm                            ***
  *** Description: Asks the user to pick a number within a range,    ***

@@ -2,7 +2,7 @@
 ******************************************************************************
 *** Project #4:  Fast Food Restaurant                                      ***
 *** Program:     restaurant                                                ***
-*** Author:      Jacob Bass (bass@ou.edu)                                  ***
+*** Author:      Jacob Bass (seabass992@gmail.com)                                  ***
 *** Class:       CS 1313 010 computer Programming, Fall 2013               ***
 *** Lab:         Sec 015 Fridays 3:30pm                                    ***
 *** Description: Asks the user to input an order for entree, side dish,    *** 

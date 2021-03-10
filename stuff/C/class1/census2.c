@@ -3,7 +3,7 @@
 ***********************************************************************
 *** Project #2:	 Census                                             ***
 *** Program:     census                                             ***
-*** Author:      Jacob Bass (bass@ou.edu                            ***
+*** Author:      Jacob Bass (seabass992@gmail.com                            ***
 *** Class:       CS 1313 010 Computer Programming, Fall 2013        ***
 *** Lab:         Sec 015 Fridays 3:30pm                             ***
 *** Description: Asks the user to input social security number      ***
