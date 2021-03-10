@@ -91,8 +91,9 @@ function calc_gamma(points, alpha) {
 		
 		panels[i].V = Math.cos(panels[i].theta - alpha) + sum;
 		panels[i].Cp = 1 - Math.pow(panels[i].V, 2);
-		c_l += panels[i].Cp*panels[i].l*Math.cos(panels[i].theta-alpha);
-		c_d += panels[i].Cp*panels[i].l*Math.sin(panels[i].theta-alpha);
+		var a = alpha - panels[i].theta - (3*Math.PI/2);
+		c_l += panels[i].Cp*panels[i].l*Math.sin(a);
+		c_d += panels[i].Cp*panels[i].l*Math.cos(a);
 	}
 	return {
 		panels: panels,

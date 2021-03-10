@@ -245,7 +245,7 @@
 
             clVsCdGraph = new Graph(document.getElementById("cl_cd_graph"));
             clVsCdGraph.setXLims(0,2);
-            clVsCdGraph.setYLims(-1,2);
+            clVsCdGraph.setYLims(-0.5,0.5);
             clVsCdGraph.clearGraph();
 
             numCoordsElem = document.getElementById("num_coords");
@@ -259,6 +259,7 @@
             calcRangeButton = document.getElementById("calcRangeButton");
 
             function calcSingle(coords, combined, angle) {
+                //factor graph draw out
                 //Graph Airfoil
                 airfoilGraph.clearGraph();
 
@@ -301,22 +302,37 @@
             calcSingleButton.onclick = function() {
                 var numCoords = numCoordsElem.value;
                 var value = nacaElem.value;
-                var aoa = aoaElem.value;
+                var aoa = aoaElem.value * Math.PI / 180;
 
+                if(aoaElem.value > 20) {
+                    alert("If you use an AoA that is too high, there will be flow separation and this estimation will lose accuracy");
+                }
                 nacaCoords = calcNacaCoords(numCoords, value);
                 window.coords = nacaCoords.coords;
                 window.combined = nacaCoords.coords.lower.slice(1).reverse().concat(nacaCoords.coords.upper);
                 window.combined[0] = nacaCoords.coords.upper[nacaCoords.coords.upper.length-1];
 
-                console.log(calcSingle(window.coords, window.combined, aoa));
+                var results = calcSingle(window.coords, window.combined, aoa)
+                console.log(results);
+                var c_l =0, c_d = 0;
+                console.log('cp, l, theta');
+                results.panels.forEach(function(p) {
+                    var f = p.Cp*p.l;
+                    c_l += f*Math.sin(p.theta+(Math.PI/2)-aoa);
+                    c_d += -f*Math.cos(p.theta+(Math.PI/2)-aoa);
+                    console.log(p.Cp.toFixed(4), p.l.toFixed(2), (p.theta * 180 / Math.PI).toFixed(2));
+                });
+                console.log(c_l, c_d);
+                console.log(results.c_l, results.c_d);
+                alert("c_l: " + results.c_l.toFixed(4) + " c_d: " + results.c_d.toFixed(4));
             }
 
             calcRangeButton.onclick = function() {
                 var numCoords = numCoordsElem.value;
                 var value = nacaElem.value;
-                var aoa = aoaElem.value || 0;
-                var aoaRangeStart = aoaRangeElemStart.value;
-                var aoaRangeEnd = aoaRangeElemEnd.value;
+                var aoa = (aoaElem.value || 0) * Math.PI / 180;
+                var aoaRangeStart = aoaRangeElemStart.value * Math.PI / 180;
+                var aoaRangeEnd = aoaRangeElemEnd.value * Math.PI / 180;
                 var numIncrements = numIncrementsElem.value;
 
                 nacaCoords = calcNacaCoords(numCoords, value);
@@ -347,10 +363,14 @@
                 }));
 
                 clVsCdGraph.clearGraph();
+                console.log('| c_l |  c_d  | aoa |');
+                results.forEach(function (r) {
+                    console.log(r.c_l.toFixed(4), r.c_d.toFixed(4), (r.aoa * 180 / Math.PI).toFixed(2));
+                })
                 clVsCdGraph.drawData(results.map(function(r) {
                     return {
-                        x: r.c_d,
-                        y: r.c_l
+                        y: r.c_d,
+                        x: r.c_l
                     }
                 }));
             }
