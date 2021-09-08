@@ -20,6 +20,40 @@
 		transform: translate(-50%, -50%);
 		width: 100%;
 	}
+
+	#slideshow {
+		position: relative;
+		height: 600px;
+		width: 100%;
+	}
+	#slideshow > .slide {
+		opacity: 0%;
+		display: none;
+		overflow: hidden;
+		left: 0;
+		top: 0;
+		height: 600px;
+		width: 100%;
+		text-align: center;
+	}
+
+	#slideshow > .slide > img {
+		max-width: 100%;
+		position: relative;
+		max-height: calc(100% - 20px);
+	}
+	#slideshow > .slide > p {
+		max-width: 100%;
+		position: relative;
+		max-height: 16px;
+		margin: 0;
+		padding: 0;
+		text-align: center;
+	}
+	#slideshow > .slide.show {
+		display: block;
+		opacity: 100%;
+	}
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Home | Jacob Bass</title>
@@ -52,10 +86,89 @@
 			<img src="images/plane_inspection.jpg" />
 		</div>
 		<div class="body">
-			<p>I should put some kind of content on my front page. Maybe I'll put a slideshow or something. idk. under contruction.</p>
+			<p>I should put some kind of content on my front page. idk. under contruction.</p>
 			<p>I'm still working to add newer apps and update things.</p>
+
+			<div id="slideshow">
+				<div class="slide show">
+					<img src="images/german_mountain.jpg">
+					<p>Fairy tale mountains above Neuschwanstein Castle</p>
+				</div>
+				<div class="slide">
+					<img src="images/capstone_presentation.png">
+					<p>Senior capstone presentation picture</p>
+				</div>
+				<div class="slide">
+					<img src="images/car.jpg">
+					<p>Long journey home</p>
+				</div>
+				<div class="slide">
+					<img src="images/cuddle.jpg">
+					<p>Thor is adorable</p>
+				</div>
+				<div class="slide">
+					<img src="images/deadlift.jpg">
+					<p>Still warming up to working weight</p>
+				</div>
+				<div class="slide">
+					<img src="images/family.jpg">
+					<p>Sister, Me, Brother, SiL</p>
+				</div>
+				<div class="slide">
+					<img src="images/gullfoss.jpg">
+					<p>Gullfoss Iceland. Three waterfalls for the price of one.</p>
+				</div>
+				<div class="slide">
+					<img src="images/justice_league_robin.jpg">
+					<p>The justice league... and Robin</p>
+				</div>
+				<div class="slide">
+					<img src="images/kid.jpg">
+					<p>What has time done to me!?</p>
+				</div>
+				<div class="slide">
+					<img src="images/laguna.jpg">
+					<p>Surfs up at Laguna</p>
+				</div>
+				<div class="slide">
+					<img src="images/maine.jpeg">
+					<p>Sitting in Maine, thinking about things. Life or something, idk.</p>
+				</div>
+				<div class="slide">
+					<img src="images/mt_ryan.jpg">
+					<p>Unlocked: Mountain Climber</p>
+				</div>
+				<div class="slide">
+					<img src="images/neuschwanstein.jpg">
+					<p>When in Bavaria, visit Neuschwanstein</p>
+				</div>
+				<div class="slide">
+					<img src="images/sleepy_capstone.jpeg">
+					<p>Late night in the engineering facility</p>
+				</div>
+				<div class="slide">
+					<img src="images/thor.jpg">
+					<p>He thinks he's people</p>
+				</div>
+			</div>
 		</div>
 	</div>
+	<script>
+		//slideshow code
+		var divs = [].slice.call(document.getElementsByClassName("slide"));
+		var active = divs.findIndex((e => e.classList.contains('show')));
+		if(active === null) {
+			divs[0].classList.add('show');
+			active = 0;
+		}
+
+		setInterval(_ => {
+			console.log('change');
+			divs[active].classList.remove('show');
+			active = (active + 1) % divs.length
+			divs[active].classList.add('show');
+		}, 7500);
+	</script>
 </body>
 
 </html>
