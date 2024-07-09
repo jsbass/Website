@@ -55,6 +55,40 @@
 		display: block;
 		opacity: 100%;
 	}
+
+	#slideshow {
+		position: relative;
+		height: 600px;
+		width: 100%;
+	}
+	#slideshow > .slide {
+		opacity: 0%;
+		display: none;
+		overflow: hidden;
+		left: 0;
+		top: 0;
+		height: 600px;
+		width: 100%;
+		text-align: center;
+	}
+
+	#slideshow > .slide > img {
+		max-width: 100%;
+		position: relative;
+		max-height: calc(100% - 20px);
+	}
+	#slideshow > .slide > p {
+		max-width: 100%;
+		position: relative;
+		max-height: 16px;
+		margin: 0;
+		padding: 0;
+		text-align: center;
+	}
+	#slideshow > .slide.show {
+		display: block;
+		opacity: 100%;
+	}
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Home | Jacob Bass</title>
